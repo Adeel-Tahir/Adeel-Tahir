@@ -1,0 +1,22 @@
+connection: &connection
+  adapter: postgresql
+  host: localhost
+  username: postgres
+  password: 12345
+  pool: 5
+  timeout: 5000
+  min_messages: warning
+
+development:
+  <<: *connection
+  database: vendors_dev
+test: &test
+  <<: *connection
+  database: vendors_test
+
+production:
+  <<: *connection
+  database: vendors_production
+
+cucumber:
+  <<: *test
