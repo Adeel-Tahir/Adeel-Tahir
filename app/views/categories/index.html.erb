@@ -1,0 +1,38 @@
+<% if @category %>
+  <% @category.in_groups_of(4, false).each do |group| %>
+    <div class='row'>
+  <% group.each do |category| %>
+  <div class='col-md-3'>
+    <div class="card card-margin" style="width: 25rem;">
+        <% if category.avatar!=nil%>
+          <%=image_tag category.avatar, class:"card-img-top",height:"250px" if category.avatar.attached? %>
+        <%end%>
+        <div class="card-body">
+          <h3 class="card-title"><%=category.name%>
+        </div>
+        <% if current_user.status=="user"%>
+            <div class="card-body display-no-card">
+              <%= link_to "Edit", edit_category_path(category), class: "card-link"%>
+              <%= link_to "Delete", categories_path(category) , :confirm =>"Are you sure?", :method =>:delete, class:"card-link delete-color" %>
+            </div>
+        <% elsif current_user.status=="admin" %>
+            <div class="card-body ">
+              <%= link_to "Edit", edit_category_path(category), class: "card-link "%>
+              <%= link_to "Delete", categories_path(category) , :confirm =>"Are you sure?", :method =>:delete, class: "card-link link-color" %>
+            </div>
+        <%end%>
+    </div>
+    </div>
+  <% end %>
+  </div>
+  <%end%>
+<%end%>
+  <% if current_user.status=="user"%>
+    <div class="col-md-12 text-center display-no-card">
+        <%= link_to "Add Category" , new_category_path,class: "btn btn-primary btn-lg button-margin" %>
+    </div>
+  <% elsif current_user.status=="admin"%>
+      <div class="col-md-12 text-center">
+        <%= link_to "Add Category" , new_category_path,class: "btn btn-primary btn-lg button-margin" %>
+    </div>
+  <%end%>

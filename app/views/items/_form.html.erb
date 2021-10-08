@@ -1,0 +1,38 @@
+<%# <% if current_user.status='admin'%>
+<%= form_for [:resturant, @items],:html => {:class => "form-horizontal center"},validate: true do |f| %>
+  <div class=form-width>
+    <div class="form-group">
+      <%= f.label :name,"Name",class: "col-md-4 control-label"%>
+      <div class="col-md-8">
+        <%= f.text_field :name,class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :price,"Price",class: "col-md-4 control-label" %>
+      <div class="col-md-8">
+       <%= f.number_field :price,class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :description,"Description",class: "col-md-4 control-label" %>
+      <div class="col-md-8">
+        <%= f.text_area :description,:cols => 30, :rows => 5,class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :avatar,"Picture",class: "col-md-4 control-label" %>
+      <div class="col-md-8">
+        <%= f.file_field :avatar,class: "form-control" %>
+      </div>
+    </div>
+     <div class="form-group">
+          <%= f.label :id, "Category" ,class: "col-md-4 control-label"%>
+         <div class="col-md-8">
+          <%= f.select(:id, options_for_select(@category_list) ,class: "form-control")%>
+         </div>
+    </div>
+    <div >
+      <%= f.submit "ADD",class: "btn btn-default btn-primary btn-margin" %>
+    </div>
+  </div>
+<%end%>

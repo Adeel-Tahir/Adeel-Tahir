@@ -1,0 +1,44 @@
+// Place all the styles related to the ItemController controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.row {
+  margin-left: 1rem !important;
+}
+
+.price {
+  float: right;
+  margin-right: 2rem;
+}
+
+.card-body {
+  padding: 0.75rem !important;
+}
+
+.button-margin {
+  margin-top: 1.5rem;
+}
+
+.card-margin {
+  margin-bottom: 2rem;
+}
+
+.display-no-card {
+  display: none;
+}
+
+.form-width {
+  width: 500px
+}
+
+.btn-margin {
+  margin-left: 1rem;
+}
+
+.link-color {
+  color: red;
+}
+
+.button-margin-left {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
