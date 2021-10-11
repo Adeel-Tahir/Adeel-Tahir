@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CategoriesController < ApplicationController
   before_action :check_permissions, only: %i[edit update destroy]
   before_action :find_categories, only: %i[edit update destroy]
@@ -36,6 +38,7 @@ class CategoriesController < ApplicationController
   end
 
   def destroy
+    # byebug
     @category.destroy
     redirect_to categories_path
   end

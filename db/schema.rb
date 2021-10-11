@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_072312) do
 
   create_table "carts", force: :cascade do |t|
     t.integer "quantity"
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_carts_on_user_id"
@@ -59,6 +59,13 @@ ActiveRecord::Schema.define(version: 2021_10_07_072312) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "categories_resturants", id: false, force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.bigint "resturant_id", null: false
+    t.index ["category_id"], name: "index_categories_resturants_on_category_id"
+    t.index ["resturant_id"], name: "index_categories_resturants_on_resturant_id"
+  end
+
   create_table "categorizations", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "category_id", null: false
@@ -68,16 +75,12 @@ ActiveRecord::Schema.define(version: 2021_10_07_072312) do
     t.index ["item_id"], name: "index_categorizations_on_item_id"
   end
 
-  create_table "category_resturants", id: false, force: :cascade do |t|
-    t.bigint "category_id", null: false
-    t.bigint "resturant_id", null: false
-    t.index ["category_id"], name: "index_category_resturants_on_category_id"
-    t.index ["resturant_id"], name: "index_category_resturants_on_resturant_id"
-  end
-
   create_table "item_orders", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "order_id", null: false
+    t.integer "total", null: false
+    t.integer "quantity", null: false
+    t.integer "price", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["item_id"], name: "index_item_orders_on_item_id"
@@ -88,6 +91,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_072312) do
     t.string "name", null: false
     t.string "description", null: false
     t.integer "price", null: false
+    t.integer "status", default: 0
     t.bigint "resturant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -109,13 +113,13 @@ ActiveRecord::Schema.define(version: 2021_10_07_072312) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
+    t.string "email", default: ""
+    t.string "encrypted_password", default: ""
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer "status", null: false
-    t.string "fullname", null: false
+    t.integer "status"
+    t.string "fullname"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -126,10 +130,10 @@ ActiveRecord::Schema.define(version: 2021_10_07_072312) do
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "items"
   add_foreign_key "carts", "users"
+  add_foreign_key "categories_resturants", "categories"
+  add_foreign_key "categories_resturants", "resturants"
   add_foreign_key "categorizations", "categories"
   add_foreign_key "categorizations", "items"
-  add_foreign_key "category_resturants", "categories"
-  add_foreign_key "category_resturants", "resturants"
   add_foreign_key "item_orders", "items"
   add_foreign_key "item_orders", "orders"
 end

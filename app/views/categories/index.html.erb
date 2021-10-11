@@ -10,6 +10,7 @@
         <div class="card-body">
           <h3 class="card-title"><%=category.name%>
         </div>
+      <%if current_user%>
         <% if current_user.status=="user"%>
             <div class="card-body display-no-card">
               <%= link_to "Edit", edit_category_path(category), class: "card-link"%>
@@ -18,21 +19,35 @@
         <% elsif current_user.status=="admin" %>
             <div class="card-body ">
               <%= link_to "Edit", edit_category_path(category), class: "card-link "%>
-              <%= link_to "Delete", categories_path(category) , :confirm =>"Are you sure?", :method =>:delete, class: "card-link link-color" %>
+              <%= link_to "Delete", category_path(category) , :confirm =>"Are you sure?", :method =>:delete, class: "card-link link-color" %>
             </div>
         <%end%>
+        <%end%>
+         <% if !user_signed_in?%>
+            <div class="card-body display-no-card">
+              <%= link_to "Edit", edit_category_path(category), class: "card-link"%>
+              <%= link_to "Delete", categories_path(category) , :confirm =>"Are you sure?", :method =>:delete, class:"card-link delete-color" %>
+            </div>
+          <%end%>
     </div>
     </div>
   <% end %>
   </div>
   <%end%>
 <%end%>
-  <% if current_user.status=="user"%>
+  <%if current_user%>
+    <% if current_user.status=="user"%>
+      <div class="col-md-12 text-center display-no-card">
+          <%= link_to "Add Category" , new_category_path,class: "btn btn-primary btn-lg button-margin" %>
+      </div>
+    <% elsif current_user.status=="admin"%>
+        <div class="col-md-12 text-center">
+          <%= link_to "Add Category" , new_category_path,class: "btn btn-primary btn-lg button-margin" %>
+      </div>
+    <%end%>
+  <%end%>
+  <% if !user_signed_in?%>
     <div class="col-md-12 text-center display-no-card">
-        <%= link_to "Add Category" , new_category_path,class: "btn btn-primary btn-lg button-margin" %>
-    </div>
-  <% elsif current_user.status=="admin"%>
-      <div class="col-md-12 text-center">
-        <%= link_to "Add Category" , new_category_path,class: "btn btn-primary btn-lg button-margin" %>
-    </div>
+          <%= link_to "Add Category" , new_category_path,class: "btn btn-primary btn-lg button-margin" %>
+      </div>
   <%end%>

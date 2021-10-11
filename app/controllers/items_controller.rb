@@ -7,20 +7,18 @@ class ItemsController < ApplicationController
   before_action :category_list, only: %i[edit create new]
 
   def index
-    @categories=Category.all
+    @categories = Category.all
     @resturant = @res.items
-    # byebug
-    cate=params[:cate]
+    cate = params[:cate]
     if !cate.nil?
-      cat=Category.find(cate)
+      cat = Category.find(cate)
 
-      @resturant=cat.items.where(resturant_id: params[:resturant_id])
+      @resturant = cat.items.where(resturant_id: params[:resturant_id])
     else
       @resturant = @res.items
     end
-      @resturant=@resturant.search(params[:search].downcase)  if params[:search] && !params[:search].empty?
-      @resturant=@resturant.filter1(params[:item][:category_id])  if params[:item] && !params[:item][:category_id].empty?
-
+    @resturant = @resturant.search(params[:search].downcase) if params[:search].present?
+    @resturant = @resturant.filter1(params[:item][:category_id]) if params[:item] && !params[:item][:category_id].empty?
   end
 
   def new
@@ -37,8 +35,8 @@ class ItemsController < ApplicationController
       render :new
     end
     # byebug
-    cat_id=params[:item][:id]
-    cat=Category.find(cat_id)
+    cat_id = params[:item][:id]
+    cat = Category.find(cat_id)
     @items.categorizations.create(category: cat)
   end
 
@@ -54,9 +52,6 @@ class ItemsController < ApplicationController
     else
       render :edit
     end
-    cat_id=params[:item][:id]
-    cat=Category.find(cat_id)
-    @items.categorizations.create(category: cat)
   end
 
   def destroy
@@ -64,17 +59,10 @@ class ItemsController < ApplicationController
     redirect_to resturant_items_path
   end
 
-  # def search
-  #   @category = Category.find(params[:item][:id])
-  #   @items= @category.items
-
-  #   render json: @items, status: :ok
-  # end
-
   private
 
   def my_params
-    params.require(:item).permit(:name, :price, :description, :avatar)
+    params.require(:item).permit(:name, :price, :description, :avatar, category_ids: [])
   end
 
   def check_permissions
@@ -91,6 +79,6 @@ class ItemsController < ApplicationController
   end
 
   def category_list
-    @category_list=Category.all.pluck(:id)
+    @category_list = Category.all.pluck(:name, :id).to_h
   end
 end

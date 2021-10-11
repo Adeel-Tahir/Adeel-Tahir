@@ -1,0 +1,37 @@
+<% @cart.in_groups_of(4, false).each do |group| %>
+  <div class='row'>
+  <% group.each do |cart| %>
+    <% cart.items.each do |item| %>
+    <div class='col-md-3'>
+      <div class="card card-margin" style="width: 25rem;">
+          <% if item.avatar!=nil%>
+            <%=image_tag item.avatar, class:"card-img-top",height:"250px" if item.avatar.attached? %>
+          <%end%>
+          <div class="card-body">
+            <h3 class="card-title"><%=item.name%><h1>
+          </div>
+          <div class="card-body">
+            <p class="card-text"><%=item.description%><p>
+          </div>
+          <div class="card-body">
+            <p class="card-text price"><%=item.price%> Rs<p>
+          </div>
+           <%= form_tag cart_index_path,:method=> :post,remote:true do %>
+                <div class="form-group">
+                  <%= label_tag :quantity,"Quantity",class: "col-md-4 control-label"%>
+                  <div class="col-md-8">
+                    <%= number_field_tag :quantity,item.carts.pluck(:quantity)[0], class: "form-control" %>
+                    <%= hidden_field_tag :item ,item.id %>
+                  </div>
+                  <%= submit_tag "Update Cart", class: "btn btn-default btn-primary"%>
+                  </div>
+
+                </div>
+           <%end%>
+
+        </div>
+      </div>
+    </div>
+    <%end%>
+  <%end%>
+<%end%>
