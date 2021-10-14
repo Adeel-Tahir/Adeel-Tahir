@@ -1,16 +1,10 @@
-# frozen_string_literal: true
-
-class ResturantPolicy < ApplicationPolicy
+class CategoryPolicy < ApplicationPolicy
 
   def create?
     user.admin?
   end
 
   def edit?
-    user.admin?
-  end
-
-  def new?
     user.admin?
   end
 
@@ -21,7 +15,6 @@ class ResturantPolicy < ApplicationPolicy
   def destroy?
     user.admin?
   end
-
   class Scope < Scope
     def resolve
       scope.all

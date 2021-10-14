@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 
 class CategoriesController < ApplicationController
-  before_action :check_permissions, only: %i[edit update destroy]
   before_action :find_categories, only: %i[edit update destroy]
+  before_action :check_permissions, only: %i[edit update destroy]
+  after_action :check_permissions, only: %i[new create]
 
   def index
-    @category = Category.all
+    @categories = Category.all
   end
 
   def new
-    @categories = Category.new
+    @category = Category.new
   end
 
   def create
-    @categories = Category.new(my_params)
+    @category = Category.new(category_params)
 
-    if @categories.save
+    if @category.save
       redirect_to categories_path
     else
       render :new
     end
-    # byebug
   end
 
   def show
@@ -30,7 +30,7 @@ class CategoriesController < ApplicationController
   def edit; end
 
   def update
-    if @category.update(my_params)
+    if @category.update(category_params)
       redirect_to categories_path
     else
       render :edit
@@ -38,20 +38,18 @@ class CategoriesController < ApplicationController
   end
 
   def destroy
-    # byebug
     @category.destroy
     redirect_to categories_path
   end
 
   private
 
-  def my_params
+  def category_params
     params.require(:category).permit(:name, :avatar)
   end
 
   def check_permissions
-    @categories = Category.find(params[:id])
-    # authorize @items
+    authorize @category
   end
 
   def find_categories

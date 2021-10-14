@@ -2,9 +2,12 @@
 
 class Order < ApplicationRecord
   enum status: { ordered: 0, paid: 1, canceled: 2, completed: 3 }
+  
   belongs_to :user
+
   has_many :item_orders
   has_many :items, through: :item_orders
+
   before_save :set_total
 
   def total
@@ -14,6 +17,6 @@ class Order < ApplicationRecord
   private
 
   def set_total
-    self[:total] = subtotal
+    total = subtotal
   end
 end

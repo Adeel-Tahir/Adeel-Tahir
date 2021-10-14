@@ -1,0 +1,20 @@
+<% @cart.in_groups_of(4, false).each do |group| %>
+  <div class='row'>
+  <% group.each do |cart| %>
+    <% cart.items.each do |item| %>
+
+          <%= form_for @cart,:html => {:class => "form-horizontal center"},validate: true do |f|%>
+            <div class=form-width>
+              <div class="form-group">
+                <%= f.label :quantity,"Quantity",class: "col-md-4 control-label"%>
+                <div class="col-md-8">
+                  <%= f.text_field :quantity, class: "form-control"%>
+                </div>
+              </div>
+                <%= f.submit "Update Category", class: "btn btn-default btn-primary btn-margin"%>
+              </div>
+          <%end%>
+    <%end%>
+  <%end%>
+  </div>
+<%end%>

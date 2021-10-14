@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :users
-  root to: 'home#index'
+  devise_for :users, controllers: { sessions: 'devise_sessions' }
+  root to: 'resturants#index'
   resources :resturants do
     resources :items
   end
-  resources :cart
+  resources :carts
+  resources :cart_items
 
   resources :item_orders
 
-  # resources :cart_items
   resources :categories
 end

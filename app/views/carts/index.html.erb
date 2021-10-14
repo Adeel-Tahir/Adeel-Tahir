@@ -1,7 +1,5 @@
-<% @cart.in_groups_of(4, false).each do |group| %>
-  <div class='row'>
-  <% group.each do |cart| %>
-    <% cart.items.each do |item| %>
+<%if @cart%>
+    <% @cart.items.each do |item| %>
     <div class='col-md-3'>
       <div class="card card-margin" style="width: 25rem;">
           <% if item.avatar!=nil%>
@@ -16,22 +14,21 @@
           <div class="card-body">
             <p class="card-text price"><%=item.price%> Rs<p>
           </div>
-           <%= form_tag cart_index_path,:method=> :post,remote:true do %>
+         <%@car=item.cart_items[0]%>
+           <div class="card-body">
+            <%= link_to "Delete", @car , :confirm =>"Are you sure?", :method =>:delete, class: "card-link link-color" %>
+          </div>
+           <%= form_for @car ,remote:true do |f|%>
                 <div class="form-group">
-                  <%= label_tag :quantity,"Quantity",class: "col-md-4 control-label"%>
                   <div class="col-md-8">
-                    <%= number_field_tag :quantity,item.carts.pluck(:quantity)[0], class: "form-control" %>
-                    <%= hidden_field_tag :item ,item.id %>
+                    <%= f.number_field :quantity,value: 1, class: "form-control"%>
                   </div>
-                  <%= submit_tag "Update Cart", class: "btn btn-default btn-primary"%>
-                  </div>
-
                 </div>
+                  <%= f.submit "Update Cart", class: "btn btn-default btn-primary btn-margin"%>
+              </div>
            <%end%>
 
         </div>
       </div>
-    </div>
     <%end%>
-  <%end%>
 <%end%>

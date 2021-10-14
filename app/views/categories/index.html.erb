@@ -1,5 +1,5 @@
-<% if @category %>
-  <% @category.in_groups_of(4, false).each do |group| %>
+<% if @categories%>
+  <% @categories.in_groups_of(4, false).each do |group| %>
     <div class='row'>
   <% group.each do |category| %>
   <div class='col-md-3'>

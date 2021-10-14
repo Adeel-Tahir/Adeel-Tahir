@@ -47,41 +47,45 @@
             </div>
         <%end%>
       <%end%>
-      <% if !user_signed_in? %>
-        <div class="card-body display-no-card">
-            <%= link_to "Edit", edit_resturant_item_path(@res,item), class: "card-link"%>
-            <%= link_to "Delete", resturant_item_path(@res,item) , :confirm =>"Are you sure?", :method =>:delete, class:"card-link delete-color" %>
-        </div>
-          <div class="card-body">
-        <% if !CartItem.exists?(item_id: item.id) %>
-            <%= form_tag cart_index_path,:method=> :post do %>
-                <div class="form-group">
-                  <%= label_tag :quantity,"Quantity",class: "col-md-4 control-label"%>
-                  <div class="col-md-8">
-                    <%= number_field_tag :quantity, class: "form-control"%>
-                    <%= hidden_field_tag :item ,item.id %>
-                  </div>
-                  <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary"%>
-                  </div>
-
-                </div>
-              <%end%>
-        <% elsif CartItem.exists?(item_id: item.id) %>
-            <%= form_tag cart_index_path,:method=> :post do %>
-                <div class="form-group">
-
-                  <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary",disabled: true%>
-                  </div>
-
-                </div>
-            <%end%>
-        <%end%>
-
-
+      <%if current_user%>
+         <%cart= Cart.find_by(user_id: current_user.id)%>
+      <% else %>
+         <%cart=Cart.find_by(id: session[:cart])%>
       <%end%>
+        <div class="card-body">
+          <%if !cart.nil?%>
+            <% if !cart.cart_items.exists?(item_id: item.id) %>
+                <%= form_tag carts_path,:method=> :post do %>
+                    <div class="form-group">
+                      <div class="col-md-8">
+                        <%= hidden_field_tag :quantity,class: "form-control"%>
+                        <%= hidden_field_tag :item ,item.id %>
+                      </div>
+                      <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary"%>
+                    </div>
+                <%end%>
+            <% elsif CartItem.exists?(item_id: item.id) %>
+                <%= form_tag carts_path,:method=> :post do %>
+                    <div class="form-group">
+                      <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary",disabled: true%>
+                    </div>
+                <%end%>
+            <%end%>
+          <%else%>
+             <%= form_tag carts_path,:method=> :post do %>
+                    <div class="form-group">
+                      <div class="col-md-8">
+                        <%= hidden_field_tag :quantity,class: "form-control"%>
+                        <%= hidden_field_tag :item ,item.id %>
+                      </div>
+                      <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary"%>
+                    </div>
+                <%end%>
+          <%end%>
+        </div>
 
-   </div>
-   </div>
+    </div>
+  </div>
 <% end %>
 </div>
 <%end%>

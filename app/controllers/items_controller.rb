@@ -27,14 +27,12 @@ class ItemsController < ApplicationController
   end
 
   def create
-    # byebug
     @items = @res.items.new(my_params)
     if @items.save
       redirect_to resturant_items_path
     else
       render :new
     end
-    # byebug
     cat_id = params[:item][:id]
     cat = Category.find(cat_id)
     @items.categorizations.create(category: cat)
@@ -66,8 +64,7 @@ class ItemsController < ApplicationController
   end
 
   def check_permissions
-    @items = Item.find(params[:id])
-    authorize @items
+    # authorize @items
   end
 
   def find_resturant
