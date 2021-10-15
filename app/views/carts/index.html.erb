@@ -1,0 +1,34 @@
+<%if @cart%>
+    <% @cart.items.each do |item| %>
+    <div class='col-md-3'>
+      <div class="card card-margin" style="width: 25rem;">
+          <% if item.avatar!=nil%>
+            <%=image_tag item.avatar, class:"card-img-top",height:"250px" if item.avatar.attached? %>
+          <%end%>
+          <div class="card-body">
+            <h3 class="card-title"><%=item.name%><h1>
+          </div>
+          <div class="card-body">
+            <p class="card-text"><%=item.description%><p>
+          </div>
+          <div class="card-body">
+            <p class="card-text price"><%=item.price%> Rs<p>
+          </div>
+         <%@car=item.cart_items[0]%>
+           <div class="card-body">
+            <%= link_to "Delete", @car , :confirm =>"Are you sure?", :method =>:delete, class: "card-link link-color" %>
+          </div>
+           <%= form_for @car ,remote:true do |f|%>
+                <div class="form-group">
+                  <div class="col-md-8">
+                    <%= f.number_field :quantity,required:true, class: "form-control"%>
+                  </div>
+                </div>
+                  <%= f.submit "Update Cart", class: "btn btn-default btn-primary btn-margin"%>
+              </div>
+           <%end%>
+
+        </div>
+      </div>
+    <%end%>
+<%end%>

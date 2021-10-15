@@ -1,24 +1,36 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Dinner Dash
 
-Things you may want to cover:
+This Project is an online commerce website for online ordering.Application consist of 3 types of user Admin,authenticated user and guest user.
 
-* Ruby version
+* Admin can create Restaurants,Items and Categories
 
-* System dependencies
+* Admin can update Restaurants,Items and Categories
 
-* Configuration
+* Admin can delete Restaurants,Items and Categories
 
-* Database creation
+* Users can add,update and delete items from cart
 
-* Database initialization
+DB
 
-* How to run the test suite
+* DB used: Postgress
 
-* Services (job queues, cache servers, search engines, etc.)
+Gems used
 
-* Deployment instructions
+* gem ‘devise’
+* gem ‘bootstrap’, ‘~> 4.2.1’
+* gem ‘jquery-rails’
+* gem 'pundit'
+* gem 'bootsnap', '>= 1.1.0'
 
-* ...
+How to use
+
+* Clone this repo
+* Go to project Directory
+* create following varibles and set credetials of gmail for sending mail. MAIL_USERNAME: ‘abc.xyz@gmail.com’ MAIL_PASSWORD: ‘******’
+* DO rails db:migrate rails db:setup
+* DO db:seed
+* Do Bundle install
+* start server with rails s
+* App is running

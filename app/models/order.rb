@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
 class Order < ApplicationRecord
-  enum status: [ :ordered, :paid, :canceled, :completed]
-  belongs_to :user
-  has_many :item_orders
+  has_many :item_orders, dependent: :destroy
   has_many :items, through: :item_orders
+
+  belongs_to :user
+
+  enum status: { ordered: 0, paid: 1, canceled: 2, completed: 3 }
 end
