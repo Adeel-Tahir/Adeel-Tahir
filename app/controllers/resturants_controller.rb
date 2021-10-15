@@ -16,8 +16,10 @@ class ResturantsController < ApplicationController
   def create
     @resturant = Resturant.new(resturant_params)
     if @resturant.save
+      flash[:notice] = 'Resturant Created'
       redirect_to resturants_path(@resturant.id)
     else
+      flash[:alert] = 'Resturant not Created'
       render :new
     end
   end
@@ -30,14 +32,20 @@ class ResturantsController < ApplicationController
 
   def update
     if @resturant.update(resturant_params)
+      flash[:notice] = 'Resturant updated'
       redirect_to resturants_path
     else
+      flash[:notice] = 'Resturant not updated'
       render 'edit'
     end
   end
 
   def destroy
-    @resturant.destroy
+    if @resturant.destroy
+      flash[:notice] = 'Resturant deleted'
+    else
+      flash[:alert] = 'Resturant can not deleted'
+    end
     redirect_to resturants_path
   end
 
@@ -48,7 +56,7 @@ class ResturantsController < ApplicationController
   end
 
   def find_resturant
-    @resturant = Resturant.find(params[:id])
+    @resturant = Resturant.find_by(id: params[:id])
   end
 
   def check_permissions

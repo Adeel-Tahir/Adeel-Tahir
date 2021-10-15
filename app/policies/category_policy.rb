@@ -1,5 +1,6 @@
-class CategoryPolicy < ApplicationPolicy
+# frozen_string_literal: true
 
+class CategoryPolicy < ApplicationPolicy
   def create?
     user.admin?
   end
@@ -15,6 +16,7 @@ class CategoryPolicy < ApplicationPolicy
   def destroy?
     user.admin?
   end
+
   class Scope < Scope
     def resolve
       scope.all

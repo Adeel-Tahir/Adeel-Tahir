@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_072312) do
   end
 
   create_table "cart_items", force: :cascade do |t|
-    t.integer "quantity"
+    t.integer "quantity", default: 0
     t.bigint "cart_id", null: false
     t.bigint "item_id", null: false
     t.datetime "created_at", null: false
@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(version: 2021_10_07_072312) do
   create_table "categories_resturants", id: false, force: :cascade do |t|
     t.bigint "category_id", null: false
     t.bigint "resturant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_categories_resturants_on_category_id"
     t.index ["resturant_id"], name: "index_categories_resturants_on_resturant_id"
   end
@@ -107,7 +109,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_072312) do
   end
 
   create_table "resturants", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
