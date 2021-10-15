@@ -73,5 +73,5 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
 
-  config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host), port: 3000 }
+  config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host), port: Rails.application.credentials.host.fetch(:port) }
 end
