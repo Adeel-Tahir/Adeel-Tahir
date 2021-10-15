@@ -1,9 +1,14 @@
+# frozen_string_literal: true
+
 class CreateItemOrders < ActiveRecord::Migration[5.2]
   def change
     create_table :item_orders do |t|
-      t.belongs_to :items
-      t.belongs_to :orders
-      
+      t.belongs_to :item, foreign_key: true, null: false
+      t.belongs_to :order, foreign_key: true, null: false
+      t.integer :total, null: false
+      t.integer :quantity, null: false
+      t.integer :price, null: false
+
       t.timestamps
     end
   end

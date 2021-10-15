@@ -1,0 +1,6 @@
+<% @resturants.each do |resturant| %>
+
+      <%= link_to "#{resturant.name}",resturant_items_path(resturant)%>
+      <br>
+
+<% end %>
