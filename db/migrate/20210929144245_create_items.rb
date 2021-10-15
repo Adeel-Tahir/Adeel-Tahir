@@ -6,6 +6,7 @@ class CreateItems < ActiveRecord::Migration[5.2]
       t.string :name, null: false
       t.string :description, null: false
       t.integer :price, null: false
+      t.integer :status, default: 'available'
       t.belongs_to :resturant, index: true
       t.timestamps
     end

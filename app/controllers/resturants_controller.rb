@@ -1,23 +1,25 @@
 # frozen_string_literal: true
 
 class ResturantsController < ApplicationController
-  before_action :check_permissions, only: %i[edit update destroy]
   before_action :find_resturant, only: %i[edit update destroy]
+  before_action :check_permissions, only: %i[edit update destroy]
+  after_action :check_permissions, only: %i[new create]
 
   def index
     @resturants = Resturant.all
   end
 
   def new
-    @resturants = Resturant.new
-    authorize @resturants
+    @resturant = Resturant.new
   end
 
   def create
-    @resturants = Resturant.new(my_params)
-    if @resturants.save
-      redirect_to resturants_path(@resturants.id)
+    @resturant = Resturant.new(resturant_params)
+    if @resturant.save
+      flash[:notice] = 'Resturant Created'
+      redirect_to resturants_path(@resturant.id)
     else
+      flash[:alert] = 'Resturant not Created'
       render :new
     end
   end
@@ -29,30 +31,35 @@ class ResturantsController < ApplicationController
   def edit; end
 
   def update
-    if @resturants.update(my_params)
+    if @resturant.update(resturant_params)
+      flash[:notice] = 'Resturant updated'
       redirect_to resturants_path
     else
+      flash[:notice] = 'Resturant not updated'
       render 'edit'
     end
   end
 
   def destroy
-    @resturants.destroy
+    if @resturant.destroy
+      flash[:notice] = 'Resturant deleted'
+    else
+      flash[:alert] = 'Resturant can not deleted'
+    end
     redirect_to resturants_path
   end
 
   private
 
-  def my_params
+  def resturant_params
     params.require(:resturant).permit(:name, :avatar)
   end
 
   def find_resturant
-    @resturants = Resturant.find(params[:id])
+    @resturant = Resturant.find_by(id: params[:id])
   end
 
   def check_permissions
-    @resturants = Resturant.find(params[:id])
-    authorize @resturants
+    authorize @resturant
   end
 end

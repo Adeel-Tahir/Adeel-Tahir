@@ -1,45 +1,32 @@
 # frozen_string_literal: true
 
 class ItemsController < ApplicationController
-  before_action :check_permissions, only: %i[edit update destroy]
+  before_action :check_permission, only: %i[edit update destroy new create]
   before_action :find_resturant, only: %i[index create show]
-  before_action :find_items, only: %i[edit update destroy]
+  before_action :find_item, only: %i[edit update destroy]
   before_action :category_list, only: %i[edit create new]
 
   def index
-    @categories=Category.all
+    @categories = Category.all
     @resturant = @res.items
-    # byebug
-    cate=params[:cate]
-    if !cate.nil?
-      cat=Category.find(cate)
-
-      @resturant=cat.items.where(resturant_id: params[:resturant_id])
-    else
-      @resturant = @res.items
-    end
-      @resturant=@resturant.search(params[:search].downcase)  if params[:search] && !params[:search].empty?
-      @resturant=@resturant.filter1(params[:item][:category_id])  if params[:item] && !params[:item][:category_id].empty?
-
+    search_item
   end
 
   def new
-    @items = Item.new
-    authorize @items
+    @item = Item.new
   end
 
   def create
-    # byebug
-    @items = @res.items.new(my_params)
-    if @items.save
+    @item = @res.items.new(item_params)
+    if @item.save
+      flash[:notice] = 'Item Created'
       redirect_to resturant_items_path
     else
       render :new
     end
-    # byebug
-    cat_id=params[:item][:id]
-    cat=Category.find(cat_id)
-    @items.categorizations.create(category: cat)
+    cat_id = params[:item][:id]
+    cat = Category.find_by(id: cat_id)
+    @items.categorizations.create(category: cat) unless cat.nil?
   end
 
   def show
@@ -49,48 +36,62 @@ class ItemsController < ApplicationController
   def edit; end
 
   def update
-    if @item.update(my_params)
+    if @item.update(item_params)
+      flash[:notice] = 'Item Updated'
       redirect_to resturant_items_path(resturant_id: @item.resturant.id)
     else
-      render :edit
+      render :edit, flash[:alert] = 'Item not Updated'
     end
-    cat_id=params[:item][:id]
-    cat=Category.find(cat_id)
-    @items.categorizations.create(category: cat)
   end
 
   def destroy
-    @item.destroy
+    if @item.destroy
+      flash[:notice] = 'Item deleted'
+    else
+      flash[:alert] = 'Item can not be deleted'
+    end
     redirect_to resturant_items_path
   end
 
-  # def search
-  #   @category = Category.find(params[:item][:id])
-  #   @items= @category.items
-
-  #   render json: @items, status: :ok
-  # end
-
   private
 
-  def my_params
-    params.require(:item).permit(:name, :price, :description, :avatar)
+  def item_params
+    params.require(:item).permit(:name, :price, :description, :avatar, category_ids: [])
   end
 
-  def check_permissions
-    @items = Item.find(params[:id])
-    authorize @items
+  def check_permission
+    # authorize current_user
   end
 
   def find_resturant
-    @res = Resturant.find(params[:resturant_id])
+    @res = Resturant.find_by(id: params[:resturant_id])
   end
 
-  def find_items
-    @item = Item.find(params[:id])
+  def find_item
+    @item = Item.find_by(id: params[:id])
   end
 
   def category_list
-    @category_list=Category.all.pluck(:id)
+    @category_list = Category.all.pluck(:name, :id).to_h
+  end
+
+  def search_item
+    find_category_by_resturant
+    search_resturant
+    @resturant = @resturant.filter1(params[:item][:category_id]) if params[:item] && !params[:item][:category_id].empty?
+  end
+
+  def find_category_by_resturant
+    cate = params[:cate]
+    if !cate.nil?
+      cat = Category.find_by(id: cate)
+      @resturant = cat.items.where(resturant_id: params[:resturant_id])
+    else
+      @resturant = @res.items
+    end
+  end
+
+  def search_resturant
+    @resturant = @resturant.search(params[:search].downcase) if params[:search].present?
   end
 end

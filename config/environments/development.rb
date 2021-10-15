@@ -16,7 +16,7 @@ Rails.application.configure do
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
-  if Rails.root.join('tmp', 'caching-dev.txt').exist?
+  if Rails.root.join('tmp/caching-dev.txt').exist?
     config.action_controller.perform_caching = true
 
     config.cache_store = :memory_store
@@ -60,6 +60,18 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+  # for email
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host), protocol: 'http' }
+  # SMTP settings for gmail
+  config.action_mailer.smtp_settings = {
+    user_name: Rails.application.credentials.mailer.fetch(:user_name),
+    password: Rails.application.credentials.mailer.fetch(:password),
+    address: Rails.application.credentials.mailer.fetch(:address),
+    port: 587,
+    authentication: 'plain'
+    enable_starttls_auto: true
+  }
 
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host), port: Rails.application.credentials.host.fetch(:port) }
 end

@@ -1,19 +1,13 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :users
-  root to: 'home#index'
+  devise_for :users, controllers: { sessions: 'devise_sessions' }
+  root to: 'resturants#index'
   resources :resturants do
     resources :items
   end
+  resources :carts, except: :show
+  resources :cart_items, only: %i[update destroy edit]
 
-  resources :categories
-  # do
-  #   resources :items
-  # end
-  # do
-  #   resources :items
-  # end
-
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  resources :item_orders, :categories
 end
