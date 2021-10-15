@@ -7,9 +7,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-U1 = User.create(fullname: 'Adeeltahir', status: :user, email: 'adeeltahir447@gmail.com', password: '111111')
+U1 = User.create(fullname: 'Adeeltahir', status: :user, email: 'muhammad.adeel@devsinc.com', password: '111111')
 U2 = User.create(fullname: 'Musfer', status: :user, email: 'musfer@gmail.com', password: '111111')
-U3 = User.create(fullname: 'Ahmed', status: :user, email: 'ahmed@gmail.com', password: '111111')
+U3 = User.create(fullname: 'adeeltahir', status: :user, email: 'adeeltahir447@gmail.com', password: '111111')
 U4 = User.create(fullname: 'Ali', status: :admin, email: 'ali@gmail.com', password: '123456')
 
 R1 = Resturant.create(name: 'ALI BURGER')
@@ -24,3 +24,16 @@ I6 = Item.create(name: 'shawarma', description: 'spicy', price: 130, resturant_i
 I7 = Item.create(name: 'Sandwich', description: 'super', price: 290, resturant_id: R1.id)
 I8 = Item.create(name: 'Pizza', description: 'large', price: 850, resturant_id: R1.id)
 I9 = Item.create(name: 'Nihari', description: 'overrated', price: 550, resturant_id: R2.id)
+
+C1 = Category.create(name: 'Fast Food')
+C2 = Category.create(name: 'Desi')
+
+C11 = Categorization.create(item_id: I1.id, category_id: C2.id)
+C12 = Categorization.create(item_id: I2.id, category_id: C2.id)
+C13 = Categorization.create(item_id: I3.id, category_id: C2.id)
+C14 = Categorization.create(item_id: I4.id, category_id: C2.id)
+C15 = Categorization.create(item_id: I5.id, category_id: C1.id)
+C16 = Categorization.create(item_id: I6.id, category_id: C1.id)
+C17 = Categorization.create(item_id: I7.id, category_id: C1.id)
+C18 = Categorization.create(item_id: I8.id, category_id: C1.id)
+C19 = Categorization.create(item_id: I9.id, category_id: C2.id)

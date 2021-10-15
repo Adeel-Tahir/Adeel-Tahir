@@ -6,9 +6,9 @@
           <%= form_for @cart,:html => {:class => "form-horizontal center"},validate: true do |f|%>
             <div class=form-width>
               <div class="form-group">
-                <%= f.label :quantity,"Quantity",class: "col-md-4 control-label"%>
+                <%= f.label :quantity,"Quantity",required:true,class: "col-md-4 control-label"%>
                 <div class="col-md-8">
-                  <%= f.text_field :quantity, class: "form-control"%>
+                  <%= f.text_field :quantity,required:true, class: "form-control"%>
                 </div>
               </div>
                 <%= f.submit "Update Category", class: "btn btn-default btn-primary btn-margin"%>

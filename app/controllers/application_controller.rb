@@ -15,31 +15,26 @@ class ApplicationController < ActionController::Base
   def current_cart
     if user_signed_in?
       @shopping_cart = @user&.cart || Cart.create(user_id: current_user.id)
-      # byebug
     elsif session[:cart]
-      @shopping_cart =  Cart.find(session[:cart])
+      @shopping_cart = Cart.find(session[:cart])
     else
       @shopping_cart = Cart.create
       session[:cart] = @shopping_cart.id
     end
-
   end
 
   def login?
     !!current_customer
   end
 
-  def show_cart_items_from_guest_to_user
+  protected
 
-    if session[:cart]
-      user_cart=current_cart
-      guest_cart=Cart.find(session[:cart])
-      guest_cart.items.each{|item| CartItem.create(cart_id: current_cart.id,item_id: item.id)}
-      CartItem.where(cart_id: guest_cart.id).delete_all
-      guest_cart.destroy
-      session[:cart]=nil
-    end
+  def guest_to_user
+    return unless session[:cart]
 
+    guest_cart = Cart.find(session[:cart])
+    guest_cart.items.each { |item| CartItem.create(cart_id: current_cart.id, item_id: item.id) }
+    destroy_guest(guest_cart)
   end
 
   private
@@ -47,5 +42,11 @@ class ApplicationController < ActionController::Base
   def user_not_authorized
     flash[:alert] = 'You are not authorized to perform this action.'
     redirect_to(request.referer || root_path)
+  end
+
+  def destroy_guest(guest_cart)
+    CartItem.where(cart_id: guest_cart.id).delete_all
+    guest_cart.destroy
+    session[:cart] = nil
   end
 end

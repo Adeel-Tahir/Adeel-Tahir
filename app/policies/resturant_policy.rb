@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ResturantPolicy < ApplicationPolicy
-
   def create?
     user.admin?
   end
