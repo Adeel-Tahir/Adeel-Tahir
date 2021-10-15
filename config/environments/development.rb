@@ -62,16 +62,16 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   # for email
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { host: 'localhost:3000', protocol: 'http' }
+  config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host), protocol: 'http' }
   # SMTP settings for gmail
   config.action_mailer.smtp_settings = {
-    address: 'smtp.gmail.com',
+    user_name: Rails.application.credentials.mailer.fetch(:user_name),
+    password: Rails.application.credentials.mailer.fetch(:password),
+    address: Rails.application.credentials.mailer.fetch(:address),
     port: 587,
-    user_name: 'muhammad.adeel@devsinc.com',
-    password: 'jwegopevaabcdyrm',
-    authentication: 'plain',
+    authentication: 'plain'
     enable_starttls_auto: true
   }
 
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host), port: 3000 }
 end
