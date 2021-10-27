@@ -44,6 +44,10 @@ gem 'devise-bootstrap-views', '~> 1.0'
 
 gem 'jquery-rails'
 
+#use cloudinary
+gem 'cloudinary'
+# gem 'activestorage-cloudinary-service'
+
 # for pagination
 gem 'pagy', '~> 3.5'
 group :development, :test do

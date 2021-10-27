@@ -1,13 +1,54 @@
-<% @resturants.each do |item| %>
+<section class="mb-5">
 
-    <h1>Product:<%=item.name%><h1>
-    <% if item.avatar!=nil%>
-      <p>
-        <%=image_tag item.avatar, width: "200px" if item.avatar.attached? %>
-      </p>
-    <%end%>
+  <div class="row">
+    <div class="col-md-6 mb-4 mb-md-0">
 
-    <h4>Descripion:<%=item.description%><h1>
-    <h4>Price:<%=item.price%><h1>
-  <br>
-<% end %>
+      <div id="mdb-lightbox-ui"></div>
+
+      <div class="mdb-lightbox">
+
+        <div class="row product-gallery mx-1">
+
+          <div class="col-12 mb-0">
+            <figure class="view overlay rounded z-depth-1 main-img">
+              <a href="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/15a.jpg"
+                data-size="710x823">
+                <%# <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/15a.jpg"
+                  class="img-fluid z-depth-1"> %>
+                <% if @item.avatar!=nil%>
+                  <%=image_tag @item.avatar, class:"img-fluid z-depth-1" if @item.avatar.attached? %>
+                <%end%>
+              </a>
+            </figure>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="col-md-6">
+
+      <h5><%=@item.name%></h5>
+
+      <p><span class="mr-1"><strong>Rs <%=@item.price%></strong></span></p>
+      <p class="pt-1"><%=@item.description%></p>
+
+      <hr>
+      <% if @item.status=="available"%>
+          <%= form_tag carts_path,:method=> :post do %>
+            <div class="form-group">
+              <div class="col-md-8">
+                <%= hidden_field_tag :quantity,class: "form-control"%>
+                <%= hidden_field_tag :item ,@item.id %>
+              </div>
+              <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary"%>
+            </div>
+          <%end%>
+      <%elsif @item.status=="outOfStock"%>
+         <button class="btn btn-secondary" disabled>Retired</button>
+      <%end%>
+    </div>
+  </div>
+
+</section>

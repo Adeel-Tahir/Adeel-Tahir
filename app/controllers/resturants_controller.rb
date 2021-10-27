@@ -3,7 +3,7 @@
 class ResturantsController < ApplicationController
   before_action :find_resturant, only: %i[edit update destroy]
   before_action :check_permissions, only: %i[edit update destroy]
-  after_action :check_permissions, only: %i[new create]
+  # after_action :check_permissions, only: %i[new create]
 
   def index
     @resturants = Resturant.all

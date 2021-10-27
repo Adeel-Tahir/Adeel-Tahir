@@ -30,7 +30,7 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @resturant = @res.items
+    @item = Item.find_by(id: params[:id])
   end
 
   def edit; end
@@ -56,7 +56,7 @@ class ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:name, :price, :description, :avatar, category_ids: [])
+    params.require(:item).permit(:name, :price, :description, :status, :avatar, category_ids: [])
   end
 
   def check_permission

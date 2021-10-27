@@ -1,0 +1,35 @@
+<%if @orders%>
+    <%@order=@orders.first%>
+    <%= form_tag orders_path,:method=> :get do %>
+        <span><%= select_tag(:status,options_for_select(Order.statuses.map{ |key, value| [key.titleize, Order.statuses.key(value)]})) %></span>
+        <span><%= submit_tag "Filter",:status => nil, class: "btn btn-default btn-primary"%></span>
+    <%end%>
+
+ <table class="table_order">
+    <thead>
+        <%if current_user.admin?%>
+        <th>CustomerName</th>
+        <%end%>
+        <th>OrderId</th>
+        <th>Status</th>
+        <th>Created at</th>
+        <th>Updated at</th>
+    </thead>
+
+        <%@orders.each do |order|%>
+         <tbody>
+                  <tr>
+                      <%if current_user.admin?%>
+                         <%@user=User.find_by(id:order.user_id)%>
+                         <td><%=@user.fullname%>
+                      <%end%>
+                      <td><%=link_to "#{order.id}",order_path(order.id)%></td>
+                      <td><%=order.status%>
+                      <td><%=order.created_at%></td>
+                      <td><%=order.updated_at%></td>
+                  </tr>
+        </tbody>
+        <%end%>
+
+</table>
+<%end%>

@@ -22,8 +22,4 @@ class Item < ApplicationRecord
   def self.search(params)
     where("LOWER(name) LIKE '%#{params}%'")
   end
-
-  def self.filter1(params)
-    joins(:categories).where('categories.id = ?', params)
-  end
 end

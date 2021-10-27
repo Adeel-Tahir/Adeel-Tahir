@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class CartPolicy < ApplicationPolicy
+  def new
+    !user.admin?
+  end
   def create?
     !user.admin?
   end

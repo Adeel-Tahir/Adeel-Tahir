@@ -10,6 +10,8 @@
                 <div class="col-md-8">
                   <%= f.text_field :quantity,required:true, class: "form-control"%>
                 </div>
+
+                <%= f.hidden_field :total,value: @cart.calculate_total%>
               </div>
                 <%= f.submit "Update Category", class: "btn btn-default btn-primary btn-margin"%>
               </div>

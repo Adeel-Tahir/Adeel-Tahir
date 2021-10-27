@@ -1,0 +1,41 @@
+<%if @cart%>
+  <div class="col-md-12 carts_total">
+    <div class="total_inner row">
+      <h3>Total:</h3>
+      <span style="vertical-align:middle; margin-left:15px;"><h5>Rs <%=@cart.calculate_total%></h5><span>
+    </div>
+  </div>
+  <div class="row col-md-12">
+    <% @cart.items.each do |item| %>
+      <div class='col-md-3 col-sm-12'>
+        <div class="card card-margin" style="width: 25rem;">
+          <% if item.avatar!=nil%>
+            <%=image_tag item.avatar, class:"card-img-top",height:"250px" if item.avatar.attached? %>
+          <%end%>
+          <div class="row">
+            <div class="card-body">
+              <h3 class="card-title"><%=item.name%><h1>
+            </div>
+            <div class="card-body">
+              <p class="card-text price"><%=item.price%> Rs<p>
+            </div>
+          </div>
+          <%itm=Item.find(item.id)%>
+          <%carts=itm.cart_items[0]%>
+          <div class="card-body">
+            <div class="sub row">
+              <h5> Sub Total: </h5>
+              <p class="sub_p"> Rs <%=carts.sub_total%></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    <%end%>
+  </div>
+  <div id="confirm_checkout " class="checkout_btn">
+    <span class="cancel_btn"><%=link_to "Cancel",carts_path, class: " card-link link-color"%></span>
+    <%# <span class= "confirm_btn">Confirm</span> %>
+    <span class= "confirm_btn"><%= link_to "Confirm",orders_path,:method=>:post %></span>
+  </div>
+
+<%end%>
