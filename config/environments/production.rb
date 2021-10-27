@@ -41,7 +41,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Store uploaded files on the local file system (see config/storage.yml for options)
-  config.active_storage.service = :local
+  config.active_storage.service = :cloudinary
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
@@ -93,4 +93,28 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+    # for email
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host), protocol: 'http' }
+    # SMTP settings for gmail
+    config.action_mailer.smtp_settings = {
+      user_name: Rails.application.credentials.mailer.fetch(:user_name),
+      password: Rails.application.credentials.mailer.fetch(:password),
+      address: Rails.application.credentials.mailer.fetch(:address),
+      port: 587,
+      authentication: 'plain',
+      enable_starttls_auto: true
+    }
+
+    config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host),
+                                                 port: Rails.application.credentials.host.fetch(:port) }
+
+    Cloudinary.config do |config|
+      config.cloud_name = Rails.application.credentials.cloudinary.fetch(:cloud_name)
+      config.api_key = Rails.application.credentials.cloudinary.fetch(:api_key)
+      config.api_secret = Rails.application.credentials.cloudinary.fetch(:api_secret)
+      config.secure = true
+      config.cdn_subdomain = true
+    end
 end
