@@ -95,25 +95,25 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # for email
-  config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.delivery_method = :smtp
   # config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host), protocol: 'http' }
   # SMTP settings for gmail
-  config.action_mailer.smtp_settings = {
-    user_name: Rails.application.credentials.mailer.fetch(:user_name),
-    password: Rails.application.credentials.mailer.fetch(:password),
-    address: Rails.application.credentials.mailer.fetch(:address),
-    port: 587,
-    authentication: 'plain',
-    enable_starttls_auto: true
-  }
+  # config.action_mailer.smtp_settings = {
+  #   user_name: Rails.application.credentials.mailer.fetch(:user_name),
+  #   password: Rails.application.credentials.mailer.fetch(:password),
+  #   address: Rails.application.credentials.mailer.fetch(:address),
+  #   port: 587,
+  #   authentication: 'plain',
+  #   enable_starttls_auto: true
+  # }
 
   # config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:production_host) }
 
-  Cloudinary.config do |config|
-    config.cloud_name = Rails.application.credentials.cloudinary.fetch(:cloud_name)
-    config.api_key = Rails.application.credentials.cloudinary.fetch(:api_key)
-    config.api_secret = Rails.application.credentials.cloudinary.fetch(:api_secret)
-    config.secure = true
-    config.cdn_subdomain = true
-  end
+  # Cloudinary.config do |config|
+  #   config.cloud_name = Rails.application.credentials.cloudinary.fetch(:cloud_name)
+  #   config.api_key = Rails.application.credentials.cloudinary.fetch(:api_key)
+  #   config.api_secret = Rails.application.credentials.cloudinary.fetch(:api_secret)
+  #   config.secure = true
+  #   config.cdn_subdomain = true
+  # end
 end
