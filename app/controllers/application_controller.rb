@@ -33,7 +33,9 @@ class ApplicationController < ActionController::Base
     return unless session[:cart]
 
     guest_cart = Cart.find(session[:cart])
-    guest_cart.items.each { |item| CartItem.create(cart_id: current_cart.id, item_id: item.id) }
+    guest_cart.items.each do |item|
+      CartItem.create(cart_id: current_cart.id, item_id: item.id, quantity: CartItem.find_by(item_id: item.id).quantity)
+    end
     destroy_guest(guest_cart)
   end
 

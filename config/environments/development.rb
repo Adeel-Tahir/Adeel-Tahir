@@ -83,5 +83,4 @@ Rails.application.configure do
     config.secure = true
     config.cdn_subdomain = true
   end
-
 end

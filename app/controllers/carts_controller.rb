@@ -2,7 +2,7 @@
 
 class CartsController < ApplicationController
   before_action :find_cart, only: %i[update destroy]
-  before_action :check_permission, only: %i[update destroy]
+  before_action :check_permission, only: %i[update destroy index new create]
 
   def index
     @cart = if current_user
@@ -34,7 +34,7 @@ class CartsController < ApplicationController
   end
 
   def update
-    if @cart.update(params_update)
+    if @cart.update(cart_params)
       flash[:notice] = 'Cart updated'
       redirect_to carts_path
     else
@@ -57,8 +57,8 @@ class CartsController < ApplicationController
 
   private
 
-  def params_update
-    params.require(:cart).permit(:id, :user_id, :total,item_ids:[])
+  def cart_params
+    params.require(:cart).permit(:id, :user_id, :total, item_ids: [])
   end
 
   def find_cart_items
@@ -69,7 +69,6 @@ class CartsController < ApplicationController
 
   def create_cart
     if Cart.find_by(user_id: current_user.id).nil?
-      byebug
       @cart = Cart.new(user_id: current_user.id)
       @cart.save
       flash[:notice] = 'Cart Item Created'
@@ -84,6 +83,6 @@ class CartsController < ApplicationController
   end
 
   def check_permission
-   authorize @cart
+    authorize Cart
   end
 end

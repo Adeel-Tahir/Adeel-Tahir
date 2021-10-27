@@ -19,21 +19,21 @@
 <% @resturant.in_groups_of(4, false).each do |group| %>
 <div class='row'>
   <% group.each do |item| %>
-   <%# <%byebug%>
-    <%= link_to resturant_item_path(@resturant,item.id) do%>
       <div class='col-md-3'>
         <div class="card card-margin" style="width: 25rem;">
-          <% if item.avatar!=nil%>
-            <%=image_tag item.avatar, class:"card-img-top",height:"250px" if item.avatar.attached? %>
+          <%= link_to resturant_item_path(@resturant,item.id) do%>
+            <% if item.avatar!=nil%>
+              <%=image_tag item.avatar, class:"card-img-top",height:"250px" if item.avatar.attached? %>
+            <%end%>
+            <div class="row">
+              <div class="card-body">
+                <h3 class="card-title"><%=item.name%><h1>
+              </div>
+              <div class="card-body">
+                <p class="card-text price"><%=item.price%> Rs<p>
+              </div>
+            </div>
           <%end%>
-          <div class="row">
-            <div class="card-body">
-              <h3 class="card-title"><%=item.name%><h1>
-            </div>
-            <div class="card-body">
-              <p class="card-text price"><%=item.price%> Rs<p>
-            </div>
-          </div>
           <%if current_user%>
             <% if current_user.status=="user"%>
                 <div class="card-body display-no-card">
@@ -62,22 +62,26 @@
                             <%= hidden_field_tag :quantity,class: "form-control"%>
                             <%= hidden_field_tag :item ,item.id %>
                           </div>
-                          <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary"%>
+                          <%if !current_user || current_user.user?%>
+                            <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary"%>
+                          <%end%>
                         </div>
                     <%end%>
                   <%elsif item.status=="outOfStock"%>
-                      <button class="btn btn-secondary" disabled>Retired</button>
+                      <button class="btn btn-secondary" disabled>outOfStock</button>
 
                   <%end%>
               <% elsif CartItem.exists?(item_id: item.id) %>
                   <%if item.status=="available" %>
                       <%= form_tag carts_path,:method=> :post do %>
                           <div class="form-group">
+                          <%if !current_user || current_user.user?%>
                             <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary",disabled: true%>
+                          <%end%>
                           </div>
                       <%end%>
                   <%elsif item.status=="outOfStock"%>
-                      <button class="btn btn-secondary" disabled>Retired</button>
+                      <button class="btn btn-secondary" disabled>outOfStock</button>
                   <%end%>
               <%end%>
             <%else%>
@@ -88,17 +92,19 @@
                             <%= hidden_field_tag :quantity,class: "form-control"%>
                             <%= hidden_field_tag :item ,item.id %>
                           </div>
-                          <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary"%>
+                          <%if !current_user || current_user.user?%>
+                            <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary"%>
+                          <%end%>
                         </div>
                     <%end%>
                 <%elsif item.status=="outOfStock"%>
-                    <button class="btn btn-secondary" disabled>Retired</button>
+                    <button class="btn btn-secondary" disabled>outOfStock</button>
                 <%end%>
             <%end%>
           </div>
         </div>
       </div>
-    <%end%>
+
     <% end %>
   </div>
   <%end%>

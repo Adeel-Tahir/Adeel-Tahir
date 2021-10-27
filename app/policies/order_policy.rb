@@ -1,51 +1,51 @@
 # frozen_string_literal: true
 
-class CartPolicy < ApplicationPolicy
-  def new
+class OrderPolicy < ApplicationPolicy
+  def index?
     if user.nil?
-      true
+      false
     else
-      !user.admin?
+      true
     end
   end
 
   def create?
     if user.nil?
-      true
+      false
     else
-      !user.admin?
+      true
     end
   end
 
   def edit?
     if user.nil?
-      true
+      false
     else
-      !user.admin?
+      true
     end
   end
 
   def update?
     if user.nil?
-      true
+      false
     else
-      !user.admin?
+      true
     end
   end
 
   def destroy?
     if user.nil?
-      true
+      false
     else
-      !user.admin?
+      true
     end
   end
 
-  def index?
+  def show?
     if user.nil?
-      true
+      false
     else
-      !user.admin?
+      true
     end
   end
 

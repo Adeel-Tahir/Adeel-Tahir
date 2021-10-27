@@ -60,7 +60,7 @@ class ItemsController < ApplicationController
   end
 
   def check_permission
-    # authorize current_user
+    authorize Item
   end
 
   def find_resturant
@@ -84,8 +84,12 @@ class ItemsController < ApplicationController
   def find_category_by_resturant
     cate = params[:cate]
     if !cate.nil?
-      cat = Category.find_by(id: cate)
-      @resturant = cat.items.where(resturant_id: params[:resturant_id])
+      @cat = Category.find_by(id: cate)
+      if @cat.nil?
+        redirect_to resturant_items_path, alert: 'Category not found'
+      else
+        @resturant = @cat.items.where(resturant_id: params[:resturant_id])
+      end
     else
       @resturant = @res.items
     end

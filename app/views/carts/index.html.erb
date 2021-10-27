@@ -47,7 +47,10 @@
   </div>
   <div class="checkout_btn">
     <%if current_user%>
-      <%= link_to "Checkout",cart_path(@cart.id),class: "btn btn-default btn-primary" %>
+    <%# <%byebug%>
+      <%if @cart.cart_items[0]%>
+        <%= link_to "Checkout",cart_path(@cart.id),class: "btn btn-default btn-primary" %>
+      <%end%>
     <%end%>
   </div>
     <%@ca=Cart.find_by(id: @cart.id)%>

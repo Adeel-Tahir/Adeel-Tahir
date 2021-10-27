@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 class ResturantsController < ApplicationController
-  before_action :find_resturant, only: %i[edit update destroy]
-  before_action :check_permissions, only: %i[edit update destroy]
-  # after_action :check_permissions, only: %i[new create]
+  before_action :find_resturant, only: %i[edit update destroy show]
+  before_action :check_permissions, only: %i[edit update destroy create new]
 
   def index
     @resturants = Resturant.all
@@ -24,9 +23,7 @@ class ResturantsController < ApplicationController
     end
   end
 
-  def show
-    @resturants = Resturant.all
-  end
+  def show; end
 
   def edit; end
 
@@ -57,9 +54,13 @@ class ResturantsController < ApplicationController
 
   def find_resturant
     @resturant = Resturant.find_by(id: params[:id])
+    return unless @resturant.nil?
+
+    flash[:alert] = 'Resturant not Found'
+    redirect_to resturants_path
   end
 
   def check_permissions
-    authorize @resturant
+    authorize Resturant
   end
 end

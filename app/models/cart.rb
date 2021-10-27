@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Cart < ApplicationRecord
-
-
   belongs_to :user, optional: true
 
   has_many :cart_items, dependent: :destroy
@@ -11,6 +9,7 @@ class Cart < ApplicationRecord
   def sub_total
     quantity * item.price
   end
+
   def calculate_total
     sum = 0
     cart_items.each do |line_item|
@@ -18,5 +17,4 @@ class Cart < ApplicationRecord
     end
     sum
   end
-
 end

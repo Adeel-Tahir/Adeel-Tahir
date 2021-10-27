@@ -15,7 +15,7 @@ class CartItemsController < ApplicationController
   end
 
   def update
-    @cart = CartItem.find_by(id:params[:id])
+    @cart = CartItem.find_by(id: params[:id])
     if @cart.update(cart_item_params)
       flash[:notice] = 'Item has been Updated'
       redirect_to carts_path
@@ -34,5 +34,4 @@ class CartItemsController < ApplicationController
   def cart_item_params
     params.require(:cart_item).permit(:quantity, :subtotal)
   end
-
 end

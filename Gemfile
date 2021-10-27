@@ -44,7 +44,7 @@ gem 'devise-bootstrap-views', '~> 1.0'
 
 gem 'jquery-rails'
 
-#use cloudinary
+# use cloudinary
 gem 'cloudinary'
 # gem 'activestorage-cloudinary-service'
 
