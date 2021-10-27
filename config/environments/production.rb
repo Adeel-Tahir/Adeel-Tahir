@@ -107,8 +107,7 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
 
-  config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host),
-                                                port: Rails.application.credentials.host.fetch(:port) }
+  config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:production_host) }
 
   Cloudinary.config do |config|
     config.cloud_name = Rails.application.credentials.cloudinary.fetch(:cloud_name)
