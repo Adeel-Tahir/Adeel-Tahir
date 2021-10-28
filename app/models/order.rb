@@ -13,7 +13,4 @@ class Order < ApplicationRecord
   def self.filter1(params)
     joins(:statuses).where('status = ?', params)
   end
-  # def self.search(params)
-  #   where("LOWER(name) LIKE '%#{params}%'")
-  # end
 end
