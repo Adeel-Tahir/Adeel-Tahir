@@ -3,7 +3,7 @@
         <div class="row chng_btn">
           <span><h3 style="margin-right:10px;">Status:  </h3></span>
           <%if @order.status=="ordered" || @order.status=="paid"%>
-            <%= form_for @order ,remote:true do |f|%>
+            <%= form_for @order do |f|%>
                 <span><%= f.select(:status,options_for_select(Order.statuses.map{ |key, value| [key.titleize, Order.statuses.key(value)]},:selected => f.object.status)) %></span>
                 <span><%= f.submit "Change", class: "btn btn-default btn-primary"%></span>
             <%end%>
