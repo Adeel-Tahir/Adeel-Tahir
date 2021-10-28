@@ -22,7 +22,7 @@
           </div>
 
           <%@car=item.cart_items[0]%>
-            <%= form_for @car ,remote:true do |f|%>
+            <%= form_for @car do |f|%>
               <div class="form-group">
                 <div class="col-md-12">
                   <%= f.number_field :quantity,required:true, class: "form-control"%>
