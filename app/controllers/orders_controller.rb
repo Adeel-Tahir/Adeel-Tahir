@@ -20,8 +20,13 @@ class OrdersController < ApplicationController
 
   def create
     @order = Order.new(user_id: current_user&.id, status: 0, total: current_user.cart.total)
-    @order.save
-    shift_data_to_order
+    if  @order.save
+      shift_data_to_order
+    else
+      redirect_to resturants_path, alert: 'Order not created'
+    end
+
+
   end
 
   def update
