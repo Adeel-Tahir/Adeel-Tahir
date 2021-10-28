@@ -37,7 +37,11 @@
                 <%= hidden_field_tag :quantity,class: "form-control"%>
                 <%= hidden_field_tag :item ,@item.id %>
               </div>
-              <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary"%>
+              <% if !CartItem.exists?(item_id: @item.id)%>
+                <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary"%>
+              <%else%>
+                <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary",disabled: true%>
+              <%end%>
             </div>
           <%end%>
       <%elsif @item.status=="outOfStock"%>
