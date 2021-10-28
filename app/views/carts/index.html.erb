@@ -2,7 +2,7 @@
   <div class="col-md-12 carts_total">
     <div class="total_inner row">
       <h3>Total:</h3>
-      <span style="vertical-align:middle; margin-left:15px;"><h5>Rs <%=@cart.calculate_total%></h5><span>
+      <span style="vertical-align:middle; margin-left:15px;"><h5>Rs <%=calculate_total(@cart)%></h5><span>
     </div>
   </div>
   <div class="row col-md-12">
@@ -26,7 +26,7 @@
               <div class="form-group">
                 <div class="col-md-12">
                   <%= f.number_field :quantity,required:true, class: "form-control"%>
-                  <%= f.hidden_field :subtotal,value:@car.sub_total%>
+                  <%= f.hidden_field :subtotal,value:sub_total(@car)%>
                 </div>
               </div>
               <div class=" card_last row">
@@ -37,7 +37,7 @@
               </div>
               <div class="sub row">
                 <h5> Sub Total: </h5>
-                <p class="sub_p"> Rs <%=@car.sub_total%></p>
+                <p class="sub_p"> Rs <%=sub_total(@car)%></p>
               </div>
             <%end%>
 
@@ -54,6 +54,6 @@
     <%end%>
   </div>
     <%@ca=Cart.find_by(id: @cart.id)%>
-    <%@ca.total=@cart.calculate_total%>
+    <%@ca.total=calculate_total(@cart)%>
     <%link_to carts_path(@ca.total)%>
 <%end%>

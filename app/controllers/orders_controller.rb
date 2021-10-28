@@ -27,8 +27,7 @@ class OrdersController < ApplicationController
   def update
     @order = Order.find_by(id: params[:id])
     if @order.update(order_params)
-      flash[:notice] = 'Order Item updated'
-      redirect_to orders_path
+      redirect_to orders_path, notice: 'Order Item updated'
     else
       render :edit, flash[:alert] = 'Order Item not updated'
     end
@@ -42,10 +41,9 @@ class OrdersController < ApplicationController
 
   def destroy_cart_items
     @cart = Cart.find_by(user_id: current_user&.id)
-    @cart_items = CartItem.where(cart_id: @cart.id)
+    @cart_items = @cart.cart_items
     @cart_items.each(&:destroy)
-    flash[:notice] = 'Thank you for Ordering,Order Confirmed'
-    redirect_to resturants_path
+    redirect_to resturants_path, notice: 'Thank you for Ordering,Order Confirmed'
   end
 
   def order_params
@@ -58,7 +56,7 @@ class OrdersController < ApplicationController
 
   def shift_data_to_order
     @cart = Cart.find_by(user_id: current_user&.id)
-    @cart_items = CartItem.where(cart_id: @cart.id)
+    @cart_items = @cart.cart_items
     order = Order.find_by(id: params[:order])
     create_order(order)
   end
@@ -68,7 +66,7 @@ class OrdersController < ApplicationController
       i = CartItem.find_by(item_id: items.item_id)
       item = Item.find(i.item_id)
       @order.item_orders.create(order: order, quantity: items.quantity, item_id: items.item_id, price: item.price,
-                                subtotal: i.sub_total)
+                                subtotal: i.quantity * i.item.price)
     end
     destroy_cart_items
   end

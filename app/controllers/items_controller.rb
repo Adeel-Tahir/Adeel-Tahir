@@ -19,8 +19,7 @@ class ItemsController < ApplicationController
   def create
     @item = @res.items.new(item_params)
     if @item.save
-      flash[:notice] = 'Item Created'
-      redirect_to resturant_items_path
+      redirect_to resturant_items_path,notice:'Item Created'
     else
       render :new
     end

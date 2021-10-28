@@ -96,7 +96,8 @@ Rails.application.configure do
 
   # for email
   # config.action_mailer.delivery_method = :smtp
-  # config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host), protocol: 'http' }
+  # config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host),
+  # protocol: 'http' }
   # SMTP settings for gmail
   # config.action_mailer.smtp_settings = {
   #   user_name: Rails.application.credentials.mailer.fetch(:user_name),

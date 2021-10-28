@@ -47,7 +47,6 @@ class ApplicationController < ActionController::Base
   end
 
   def destroy_guest(guest_cart)
-    CartItem.where(cart_id: guest_cart.id).delete_all
     guest_cart.destroy
     session[:cart] = nil
   end

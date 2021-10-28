@@ -29,8 +29,7 @@ class ResturantsController < ApplicationController
 
   def update
     if @resturant.update(resturant_params)
-      flash[:notice] = 'Resturant updated'
-      redirect_to resturants_path
+      redirect_to resturants_path,notice:'Resturant updated'
     else
       flash[:notice] = 'Resturant not updated'
       render 'edit'
