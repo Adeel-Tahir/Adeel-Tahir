@@ -13,45 +13,45 @@ U3 = User.create!(fullname: 'adeeltahir', status: :user, email: 'adeeltahir447@g
 U4 = User.create!(fullname: 'Ali', status: :admin, email: 'ali@gmail.com', password: '123456')
 
 R1 = Resturant.create!(name: 'ALI BURGER')
-# R1.avatar.attach(io: File.open(Rails.root.join('app/assets/images/ali.jpeg')),
-#                  filename: 'ali.jpeg')
+R1.avatar.attach(io: File.open(Rails.root.join('app/assets/images/ali.jpeg')),
+                 filename: 'ali.jpeg')
 R2 = Resturant.create!(name: 'MADNI RESTURANT')
-# R2.avatar.attach(io: File.open(Rails.root.join('app/assets/images/madni.jpeg')),
-#                  filename: 'madni.jpeg')
+R2.avatar.attach(io: File.open(Rails.root.join('app/assets/images/madni.jpeg')),
+                 filename: 'madni.jpeg')
 
 I1 = Item.create!(name: 'Biryani', description: 'yummy', price: 200, resturant_id: R2.id)
-# I1.avatar.attach(io: File.open(Rails.root.join('app/assets/images/biryani.jpg')),
-#                  filename: 'biryani.jpeg')
+I1.avatar.attach(io: File.open(Rails.root.join('app/assets/images/biryani.jpg')),
+                 filename: 'biryani.jpeg')
 I2 = Item.create!(name: 'Daal mash', description: 'tasty', price: 80, resturant_id: R2.id)
-# I2.avatar.attach(io: File.open(Rails.root.join('app/assets/images/daal_mash.jpg')),
-#                  filename: 'daal_mash.jpg')
+I2.avatar.attach(io: File.open(Rails.root.join('app/assets/images/daal_mash.jpg')),
+                 filename: 'daal_mash.jpg')
 I3 = Item.create!(name: 'Channa', description: 'good', price: 60, resturant_id: R2.id)
-# I3.avatar.attach(io: File.open(Rails.root.join('app/assets/images/channa.webp')),
-#                  filename: 'channa.webp')
+I3.avatar.attach(io: File.open(Rails.root.join('app/assets/images/channa.webp')),
+                 filename: 'channa.webp')
 I4 = Item.create!(name: 'Qorma', description: 'yummy', price: 160, resturant_id: R2.id)
-# I4.avatar.attach(io: File.open(Rails.root.join('app/assets/images/qorma.jpeg')),
-#                  filename: 'qorma.jpeg')
+I4.avatar.attach(io: File.open(Rails.root.join('app/assets/images/qorma.jpeg')),
+                 filename: 'qorma.jpeg')
 I5 = Item.create!(name: 'Zinger burger', description: 'chrispy', price: 230, resturant_id: R1.id)
-# I5.avatar.attach(io: File.open(Rails.root.join('app/assets/images/zinger.jpg')),
-#                  filename: 'zinger.jpg')
+I5.avatar.attach(io: File.open(Rails.root.join('app/assets/images/zinger.jpg')),
+                 filename: 'zinger.jpg')
 I6 = Item.create!(name: 'shawarma', description: 'spicy', price: 130, resturant_id: R1.id)
-# I6.avatar.attach(io: File.open(Rails.root.join('app/assets/images/shawarma.jpg')),
-#                  filename: 'shawarma.jpg')
+I6.avatar.attach(io: File.open(Rails.root.join('app/assets/images/shawarma.jpg')),
+                 filename: 'shawarma.jpg')
 I7 = Item.create!(name: 'Sandwich', description: 'super', price: 290, resturant_id: R1.id)
-# I7.avatar.attach(io: File.open(Rails.root.join('app/assets/images/sandwich.jpg')),
-#                  filename: 'sandwich.jpg')
+I7.avatar.attach(io: File.open(Rails.root.join('app/assets/images/sandwich.jpg')),
+                 filename: 'sandwich.jpg')
 I8 = Item.create!(name: 'Pizza', description: 'large', price: 850, resturant_id: R1.id)
-# I8.avatar.attach(io: File.open(Rails.root.join('app/assets/images/pizza.jpg')),
-#                  filename: 'pizza.jpg')
+I8.avatar.attach(io: File.open(Rails.root.join('app/assets/images/pizza.jpg')),
+                 filename: 'pizza.jpg')
 I9 = Item.create!(name: 'Nihari', description: 'overrated', price: 550, resturant_id: R2.id)
-# I9.avatar.attach(io: File.open(Rails.root.join('app/assets/images/nihari.jpg')),
-#                  filename: 'nihari.jpg')
+I9.avatar.attach(io: File.open(Rails.root.join('app/assets/images/nihari.jpg')),
+                 filename: 'nihari.jpg')
 C1 = Category.create!(name: 'Fast Food')
-# C1.avatar.attach(io: File.open(Rails.root.join('app/assets/images/fast_food.jpg')),
-#                  filename: 'fast_food.jpg')
+C1.avatar.attach(io: File.open(Rails.root.join('app/assets/images/fast_food.jpg')),
+                 filename: 'fast_food.jpg')
 C2 = Category.create!(name: 'Desi')
-# C2.avatar.attach(io: File.open(Rails.root.join('app/assets/images/desi.jpg')),
-#                  filename: 'desi.jpg')
+C2.avatar.attach(io: File.open(Rails.root.join('app/assets/images/desi.jpg')),
+                 filename: 'desi.jpg')
 C11 = Categorization.create!(item_id: I1.id, category_id: C2.id)
 C12 = Categorization.create!(item_id: I2.id, category_id: C2.id)
 C13 = Categorization.create!(item_id: I3.id, category_id: C2.id)
