@@ -44,6 +44,7 @@ class CartsController < ApplicationController
 
   def show
     @cart = Cart.find_by(id: params[:id])
+    redirect_to carts_path, alert: 'Cart is empty' if @cart.nil?
   end
 
   def destroy

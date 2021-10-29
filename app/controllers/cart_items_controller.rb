@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class CartItemsController < ApplicationController
-  # after_save :update_event_status, on: update
-
   def destroy
     @cart_item = CartItem.find_by(id: params[:id])
     if @cart_item.destroy
