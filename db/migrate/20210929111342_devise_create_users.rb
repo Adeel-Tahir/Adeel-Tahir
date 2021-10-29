@@ -14,7 +14,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.2]
       ## Rememberable
       t.datetime :remember_created_at
 
-      t.integer :status
+      t.integer :status,default: 1
       t.string :fullname
 
       ## Trackable
