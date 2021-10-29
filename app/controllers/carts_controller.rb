@@ -10,7 +10,9 @@ class CartsController < ApplicationController
             else
               Cart.find_by(id: session[:cart])
             end
-    flash[:notice] = 'Cart is Empty' if @cart.nil?
+    if @cart.cart_items[0].nil?
+       flash[:notice]='Cart is Empty'
+    end
   end
 
   def new
