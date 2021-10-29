@@ -10,10 +10,10 @@
         <%if current_user.admin?%>
         <th>CustomerName</th>
         <%end%>
-        <th>Order Link</th>
         <th>Status</th>
         <th>Order Created</th>
         <th>Order Updated</th>
+        <th>Order Link</th>
     </thead>
 
         <%@orders.each do |order|%>
@@ -23,10 +23,10 @@
                          <%@user=User.find_by(id:order.user_id)%>
                          <td><%=@user.fullname%>
                       <%end%>
-                      <td><%=link_to "View Order",order_path(order.id)%></td>
                       <td><%=order.status%>
                       <td><%=order.created_at%></td>
                       <td><%=order.updated_at%></td>
+                      <td><%=link_to "View Order",order_path(order.id)%></td>
                   </tr>
         </tbody>
         <%end%>

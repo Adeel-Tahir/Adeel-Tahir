@@ -1,7 +1,7 @@
 
 <%if current_user%>
   <%if @cart.cart_items[0]%>
-    <%= link_to "Clear Cart",@cart,:confirm =>"Are you sure?", :method =>:delete,class: " btn btn-danger danger-margin" %>
+    <%= link_to "Clear Cart",@cart,:confirm =>"Are you sure?", :method =>:delete,data:{confirm:'Are you sure to clear cart?'},class: " btn btn-danger danger-margin" %>
   <%end%>
 <%end%>
 <%if @cart%>
@@ -54,7 +54,8 @@
   <div class="checkout_btn">
     <%if current_user%>
       <%if @cart.cart_items[0]%>
-        <%= link_to "Checkout",cart_path(@cart.id),class: "btn btn-default btn-primary" %>
+
+        <%= link_to "Checkout",orders_path,:method=>:post,data:{confirm:'Are you sure to confirm order?'},class: "btn btn-default btn-primary" %>
       <%end%>
     <%end%>
   </div>
