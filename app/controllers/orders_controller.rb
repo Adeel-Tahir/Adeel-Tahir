@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class OrdersController < ApplicationController
-  before_action :check_permissions, only: %i[index new update create show]
+  before_action :check_authentication, only: %i[index new update create show]
 
   def index
     return unless current_user
 
     if current_user.user?
-      @orders = Order.where(user_id: current_user.id)
+      @orders = current_user.orders
     elsif current_user.admin?
       @orders = Order.all
       @orders = @orders.filter_by_status(params[:status]) if params[:status].present?
@@ -20,13 +20,11 @@ class OrdersController < ApplicationController
 
   def create
     @order = Order.new(user_id: current_user&.id, status: 0, total: current_user.cart.total)
-    if  @order.save
+    if @order.save
       shift_data_to_order
     else
       redirect_to resturants_path, alert: 'Order not created'
     end
-
-
   end
 
   def update
@@ -40,6 +38,7 @@ class OrdersController < ApplicationController
 
   def show
     @order = Order.find_by(id: params[:id])
+    redirect_to orders_path, alert: 'Order not Found' if @order.nil?
   end
 
   private
@@ -55,8 +54,8 @@ class OrdersController < ApplicationController
     params.require(:order).permit(:total, :status)
   end
 
-  def check_permissions
-    authorize Order
+  def check_authentication
+    authenticate_user!
   end
 
   def shift_data_to_order
@@ -68,10 +67,10 @@ class OrdersController < ApplicationController
 
   def create_order(order)
     @cart_items.each do |items|
-      i = CartItem.find_by(item_id: items.item_id)
-      item = Item.find(i.item_id)
+      cart_item = CartItem.find_by(item_id: items.item_id)
+      item = Item.find_by(id: cart_item.item_id)
       @order.item_orders.create(order: order, quantity: items.quantity, item_id: items.item_id, price: item.price,
-                                subtotal: i.quantity * i.item.price)
+                                subtotal: cart_item.quantity * cart_item.item.price)
     end
     destroy_cart_items
   end

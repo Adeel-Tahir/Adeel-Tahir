@@ -19,7 +19,7 @@ class ItemsController < ApplicationController
   def create
     @item = @res.items.new(item_params)
     if @item.save
-      redirect_to resturant_items_path,notice:'Item Created'
+      redirect_to resturant_items_path, notice: 'Item Created'
     else
       render :new
     end
@@ -30,6 +30,7 @@ class ItemsController < ApplicationController
 
   def show
     @item = Item.find_by(id: params[:id])
+    redirect_to resturants_path, alert: 'Item not found' if @item.nil?
   end
 
   def edit; end
@@ -87,7 +88,7 @@ class ItemsController < ApplicationController
       if @cat.nil?
         redirect_to resturant_items_path, alert: 'Category not found'
       else
-        @resturant = @cat.items.where(resturant_id: params[:resturant_id])
+        @resturant = @cat.items.find_resturant_item(params[:resturant_id])
       end
     else
       @resturant = @res.items

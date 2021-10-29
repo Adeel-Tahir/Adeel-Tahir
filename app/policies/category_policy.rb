@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CategoryPolicy < ApplicationPolicy
-
   def create?
     if user.nil?
       false

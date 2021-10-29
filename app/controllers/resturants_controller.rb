@@ -29,7 +29,7 @@ class ResturantsController < ApplicationController
 
   def update
     if @resturant.update(resturant_params)
-      redirect_to resturants_path,notice:'Resturant updated'
+      redirect_to resturants_path, notice: 'Resturant updated'
     else
       flash[:notice] = 'Resturant not updated'
       render 'edit'
@@ -55,8 +55,7 @@ class ResturantsController < ApplicationController
     @resturant = Resturant.find_by(id: params[:id])
     return unless @resturant.nil?
 
-    flash[:alert] = 'Resturant not Found'
-    redirect_to resturants_path
+    redirect_to resturants_path, alert: 'Resturant not Found'
   end
 
   def check_permissions
