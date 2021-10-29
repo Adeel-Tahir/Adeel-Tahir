@@ -1,3 +1,21 @@
+<% if current_user %>
+ <% if current_user.status=="admin"%>
+    <div class="col-md-12 text-center">
+      <%= link_to "Add Resturant" , new_resturant_path,class: "btn btn-primary btn-lg button-margin" %>
+    </div>
+ <% elsif current_user.status=="user" %>
+    <div class="col-md-12 text-center display-no-card">
+      <%= link_to "Add Resturant" , new_resturant_path,class: "btn btn-primary btn-lg button-margin" %>
+    </div>
+ <%end%>
+<%end%>
+
+  <% if !user_signed_in? %>
+      <div class="col-md-12 text-center display-no-card">
+      <%= link_to "Add Resturant" , new_resturant_path,class: "btn btn-primary btn-lg button-margin" %>
+    </div>
+ <%end%>
+
 <% @resturants.in_groups_of(4, false).each do |group| %>
   <div class='row'>
 <% group.each do |resturant| %>
@@ -36,20 +54,3 @@
 <% end %>
 </div>
 <%end%>
-<% if current_user %>
- <% if current_user.status=="admin"%>
-    <div class="col-md-12 text-center">
-      <%= link_to "Add Resturant" , new_resturant_path,class: "btn btn-primary btn-lg button-margin" %>
-    </div>
- <% elsif current_user.status=="user" %>
-    <div class="col-md-12 text-center display-no-card">
-      <%= link_to "Add Resturant" , new_resturant_path,class: "btn btn-primary btn-lg button-margin" %>
-    </div>
- <%end%>
-<%end%>
-
-  <% if !user_signed_in? %>
-      <div class="col-md-12 text-center display-no-card">
-      <%= link_to "Add Resturant" , new_resturant_path,class: "btn btn-primary btn-lg button-margin" %>
-    </div>
- <%end%>
