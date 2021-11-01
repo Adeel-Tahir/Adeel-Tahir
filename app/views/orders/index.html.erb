@@ -21,7 +21,7 @@
                   <tr>
                       <%if current_user.admin?%>
                          <%@user=User.find_by(id:order.user_id)%>
-                         <%if @user.nil?%>
+                         <%if @user.fullname.nil?%>
                              <td>Waleed
                          <%else%>
                             <td><%=@user.fullname%>
