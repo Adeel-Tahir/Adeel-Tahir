@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   before_action :current_customer, :current_cart
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   include Pundit
   include ApplicationHelper
@@ -49,5 +50,11 @@ class ApplicationController < ActionController::Base
   def destroy_guest(guest_cart)
     guest_cart.destroy
     session[:cart] = nil
+  end
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:fullname])
   end
 end
