@@ -75,7 +75,7 @@
             <%if !cart.nil?%>
               <% if !cart.cart_items.exists?(item_id: item.id) %>
                   <%if item.status=="available" %>
-                    <%= form_tag carts_path,:method=> :post do %>
+                    <%= form_tag carts_path,:remote => true,:method=> :post do %>
                         <div class="form-group">
                           <div class="col-md-8">
                             <%= hidden_field_tag :quantity,class: "form-control"%>
@@ -92,7 +92,7 @@
                   <%end%>
               <% elsif CartItem.exists?(item_id: item.id) %>
                   <%if item.status=="available" %>
-                      <%= form_tag carts_path,:method=> :post do %>
+                      <%= form_tag carts_path,:remote => true,:method=> :post do %>
                           <div class="form-group">
                           <%if !current_user || current_user.user?%>
                             <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary",disabled: true%>
@@ -105,7 +105,7 @@
               <%end%>
             <%else%>
                <%if item.status=="available"%>
-                  <%= form_tag carts_path,:method=> :post do %>
+                  <%= form_tag carts_path,:remote => true,:method=> :post do %>
                         <div class="form-group">
                           <div class="col-md-8">
                             <%= hidden_field_tag :quantity,class: "form-control"%>
