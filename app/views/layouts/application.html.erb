@@ -12,16 +12,9 @@
   <body>
   <%= render 'shared/navbar'%>
   <%= render 'shared/flash'%>
-  <% unless flash.empty? %>
-    <script type="text/javascript">
-        <% flash.each do |f| %>
-        <% type = f[0].to_s %>
-        toastr['<%= type %>']('<%= f[1] %>');
-        <% end %>
-    </script>
-  <% end %>
+  <%= render 'shared/toast'%>
      <p class="notice"></p>
        <p class="alert"></p>
-    <%= yield %>
+     <%= yield %>
   </body>
 </html>

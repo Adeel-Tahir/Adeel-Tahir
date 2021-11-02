@@ -3,7 +3,7 @@
   <% group.each do |cart| %>
     <% cart.items.each do |item| %>
 
-          <%= form_for @cart,:html => {:class => "form-horizontal center"},validate: true do |f|%>
+          <%= form_for @cart,:html => {:class => "form-horizontal center"} do |f|%>
             <div class=form-width>
               <div class="form-group">
                 <%= f.label :quantity,"Quantity",required:true,class: "col-md-4 control-label"%>
