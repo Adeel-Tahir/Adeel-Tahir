@@ -30,6 +30,7 @@ class ItemsController < ApplicationController
 
   def show
     @item = Item.find_by(id: params[:id])
+    @resturant=@item.resturant.items
     redirect_to resturants_path, alert: 'Item not found' if @item.nil?
   end
 
