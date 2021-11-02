@@ -48,6 +48,9 @@ gem 'jquery-rails'
 gem 'cloudinary'
 # gem 'activestorage-cloudinary-service'
 
+#for adding toaster
+gem 'toastr-rails'
+
 # for pagination
 gem 'pagy', '~> 3.5'
 group :development, :test do

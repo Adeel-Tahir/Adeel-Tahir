@@ -10,9 +10,7 @@ class CartsController < ApplicationController
             else
               Cart.find_by(id: session[:cart])
             end
-    if @cart.cart_items[0].nil?
-       flash[:notice]='Cart is Empty'
-    end
+    flash[:notice] = 'Cart is Empty' if @cart.cart_items[0].nil?
   end
 
   def new
@@ -20,12 +18,14 @@ class CartsController < ApplicationController
   end
 
   def create
+    @item = Item.find_by(id: params[:item])
+    @res = @item.resturant
+    @resturant = @res.items
     if current_user
       create_cart
     else
       cart_id = session[:cart]
       @cart = Cart.find_by(id: cart_id)
-
       find_cart_items
     end
   end
@@ -67,7 +67,9 @@ class CartsController < ApplicationController
   def find_cart_items
     item = Item.find(params[:item])
     @cart.cart_items.create(item: item, quantity: 1)
-    redirect_to carts_path if @cart.save
+    respond_to do |format|
+      format.js if @cart.save
+    end
   end
 
   def create_cart

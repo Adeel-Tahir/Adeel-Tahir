@@ -61,10 +61,11 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   # for email
-  config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.delivery_method = :smtp
+
   config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:host),
-                                               port:Rails.application.credentials.host.fetch(:port)}
-  config.action_mailer.perform_deliveries= true
+                                               port: Rails.application.credentials.host.fetch(:port) }
+  config.action_mailer.perform_deliveries = true
   # SMTP settings for gmail
   config.action_mailer.smtp_settings = {
     user_name: Rails.application.credentials.mailer.fetch(:user_name),
@@ -72,7 +73,9 @@ Rails.application.configure do
     address: Rails.application.credentials.mailer.fetch(:address),
     port: 587,
     authentication: 'plain'
+
   }
+
   Cloudinary.config do |config|
     config.cloud_name = Rails.application.credentials.cloudinary.fetch(:cloud_name)
     config.api_key = Rails.application.credentials.cloudinary.fetch(:api_key)
