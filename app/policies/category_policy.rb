@@ -2,21 +2,17 @@
 
 class CategoryPolicy < ApplicationPolicy
   def create?
-    user.admin?
+    if user.nil?
+      false
+    else
+      user.admin?
+    end
   end
 
-  def edit?
-    user.admin?
-  end
-
-  def update?
-    user.admin?
-  end
-
-  def destroy?
-    user.admin?
-  end
-
+  alias new? create?
+  alias edit? create?
+  alias update? create?
+  alias destroy? create?
   class Scope < Scope
     def resolve
       scope.all

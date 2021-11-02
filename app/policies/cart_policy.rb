@@ -2,24 +2,18 @@
 
 class CartPolicy < ApplicationPolicy
   def create?
-    !user.admin?
+    if user.nil?
+      true
+    else
+      !user.admin?
+    end
   end
 
-  def edit?
-    !user.admin?
-  end
-
-  def update?
-    !user.admin?
-  end
-
-  def destroy?
-    !user.admin?
-  end
-
-  def index?
-    !user.admin?
-  end
+  alias new? create?
+  alias edit? create?
+  alias update? create?
+  alias destroy? create?
+  alias index? create?
 
   class Scope < Scope
     def resolve

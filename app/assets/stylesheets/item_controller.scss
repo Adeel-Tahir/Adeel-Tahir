@@ -16,6 +16,7 @@
 
 .button-margin {
   margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .card-margin {
@@ -46,4 +47,140 @@
 .form-margin {
   margin-left: 1.5rem;
   margin-bottom: 1rem;
+}
+
+.card_last {
+  margin-bottom: 20px;
+}
+
+.sub {
+  vertical-align: middle;
+  padding: 10px;
+  border: 1px solid #a8a8a8;
+  border-radius: 10px;
+  margin: 15px !important;
+}
+
+.sub h5 {
+  margin-bottom: 0px !important;
+}
+
+.sub_p {
+  margin-left: 20px;
+  margin-bottom: 0px !important;
+}
+
+.card_last .card-body span {
+  margin-left: 50% !important;
+}
+
+.upr_row {
+  margin-bottom: 15px;
+}
+
+.chng_btn {
+  margin-left: 30% !important;
+  float: right;
+  margin-right: 40px;
+}
+
+.table_order {
+  width: 100%;
+  padding: 20px;
+}
+
+.table_order td {
+  border: 1px solid #a8a8a8;
+  padding: 5px 10px;
+}
+
+.table_order tr th {
+  border: 1px solid #a8a8a8;
+  background-color: #dddddd;
+  padding: 5px 10px;
+}
+
+.order_table {
+  padding: 20px;
+}
+
+.order_table tr th {
+  border: 1px solid #a8a8a8;
+  background-color: #dddddd;
+  padding: 5px 10px;
+}
+
+.order_table td {
+  border: 1px solid #a8a8a8;
+  padding: 5px 10px;
+
+}
+
+.order_table .order_table_update {
+  text-align: right !important;
+}
+
+.order_table table {
+  width: 100%;
+}
+
+.order_table select {
+
+  margin-right: 5px;
+  padding: 7px 10px;
+  border-radius: 5px;
+}
+
+.total_inner {
+  margin-left: 90% !important;
+}
+
+.checkout_btn {
+  margin-left: 45% !important;
+  margin-top: 1%;
+}
+
+.cancel_btn {
+  margin-top: 15% !important;
+  padding: 15px 10px !important;
+}
+
+.confirm_btn {
+  background-color: green;
+  border-radius: 5px;
+  padding: 15px 20px !important;
+}
+
+.confirm_btn a {
+  color: #fff;
+}
+
+.checkout_btn a:hover {
+  text-decoration: none !important;
+}
+
+.checkout_btn .cancel_btn a:hover {
+  color: red;
+}
+
+.checkout_btn a {
+  padding: 15px 40px !important;
+}
+
+.search_form {
+  margin-left: 55%;
+}
+
+.order_img {
+  width: 100px !important;
+}
+
+.set_button {
+  margin-left: 63%;
+  margin-top: -17%;
+}
+
+.danger-margin {
+  margin-left: 90%;
+  margin-bottom: 1%;
 }

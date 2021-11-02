@@ -19,11 +19,9 @@ class Item < ApplicationRecord
 
   enum status: { available: 0, outOfStock: 1 }
 
+  scope :find_resturant_item, ->(resturant) { where(resturant_id: resturant) }
+
   def self.search(params)
     where("LOWER(name) LIKE '%#{params}%'")
-  end
-
-  def self.filter1(params)
-    joins(:categories).where('categories.id = ?', params)
   end
 end

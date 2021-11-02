@@ -29,7 +29,9 @@ Rails.application.configure do
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
+  config.assets.compile = true
+
+  config.serve_static_files = true
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
@@ -41,7 +43,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Store uploaded files on the local file system (see config/storage.yml for options)
-  config.active_storage.service = :local
+  config.active_storage.service = :cloudinary
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
@@ -93,4 +95,28 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # for email
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:production_host),
+                                               protocol: 'http' }
+  # SMTP settings for gmail
+  config.action_mailer.smtp_settings = {
+    user_name: Rails.application.credentials.mailer.fetch(:user_name),
+    password: Rails.application.credentials.mailer.fetch(:password),
+    address: Rails.application.credentials.mailer.fetch(:address),
+    port: 587,
+    authentication: 'plain',
+    enable_starttls_auto: true
+  }
+
+  config.action_mailer.default_url_options = { host: Rails.application.credentials.host.fetch(:production_host) }
+
+  Cloudinary.config do |config|
+    config.cloud_name = Rails.application.credentials.cloudinary.fetch(:cloud_name)
+    config.api_key = Rails.application.credentials.cloudinary.fetch(:api_key)
+    config.api_secret = Rails.application.credentials.cloudinary.fetch(:api_secret)
+    config.secure = true
+    config.cdn_subdomain = true
+  end
 end

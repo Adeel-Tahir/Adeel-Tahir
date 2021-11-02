@@ -2,7 +2,7 @@
 
 class CategoriesController < ApplicationController
   before_action :find_categories, only: %i[edit update destroy]
-  before_action :check_permissions, only: %i[edit update destroy create]
+  before_action :check_permissions, only: %i[edit update destroy create new]
 
   def index
     @categories = Category.all
@@ -54,7 +54,7 @@ class CategoriesController < ApplicationController
   end
 
   def check_permissions
-    # authorize current_user
+    authorize Category
   end
 
   def find_categories

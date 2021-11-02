@@ -2,8 +2,7 @@
 
 class CartsController < ApplicationController
   before_action :find_cart, only: %i[update destroy]
-  before_action :check_permission, only: %i[update destroy new index]
-  before_action
+  before_action :check_permission, only: %i[update destroy index new create]
 
   def index
     @cart = if current_user
@@ -11,7 +10,7 @@ class CartsController < ApplicationController
             else
               Cart.find_by(id: session[:cart])
             end
-    flash[:notice] = 'Cart is Empty' if @cart.nil?
+    flash[:notice] = 'Cart is Empty' if @cart.cart_items[0].nil?
   end
 
   def new
@@ -19,6 +18,9 @@ class CartsController < ApplicationController
   end
 
   def create
+    @item = Item.find_by(id: params[:item])
+    @res = @item.resturant
+    @resturant = @res.items
     if current_user
       create_cart
     else
@@ -28,18 +30,23 @@ class CartsController < ApplicationController
     end
   end
 
-  def update
-    if @cart.update(params_update)
-      flash[:notice] = 'Cart Item updated'
-      redirect_to carts_path
-    else
-      render :edit, flash[:alert] = 'Cart Item not updated'
-    end
-  end
-
   def edit
     item = Item.find(params[:id])
     @cart = item.carts
+  end
+
+  def update
+    if @cart.update(cart_params)
+      flash[:notice] = 'Cart updated'
+      redirect_to carts_path
+    else
+      render :edit, flash[:alert] = 'Cart not updated'
+    end
+  end
+
+  def show
+    @cart = Cart.find_by(id: params[:id])
+    redirect_to carts_path, alert: 'Cart is empty' if @cart.nil?
   end
 
   def destroy
@@ -53,19 +60,21 @@ class CartsController < ApplicationController
 
   private
 
-  def params_update
-    params.require(:cart).permit(:id, :user_id)
+  def cart_params
+    params.require(:cart).permit(:id, :user_id, :total)
   end
 
   def find_cart_items
     item = Item.find(params[:item])
     @cart.cart_items.create(item: item, quantity: 1)
-    redirect_to carts_path if @cart.save
+    respond_to do |format|
+      format.js if @cart.save
+    end
   end
 
   def create_cart
-    if Cart.find_by(user_id: current_user&.id).nil?
-      @cart = Cart.new(user_id: current_user&.id)
+    if Cart.find_by(user_id: current_user.id).nil?
+      @cart = Cart.new(user_id: current_user.id)
       @cart.save
       flash[:notice] = 'Cart Item Created'
     else
@@ -79,8 +88,6 @@ class CartsController < ApplicationController
   end
 
   def check_permission
-    # if current_user
-    #   authorize current_user
-    # end
+    authorize Cart
   end
 end

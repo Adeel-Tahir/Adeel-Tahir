@@ -1,107 +1,38 @@
-<%= form_tag resturant_items_path,:method=> :get, class:"form-inline form-margin" do %>
-  <%= text_field_tag :search, params[:search],class:"form-control mr-sm-2" %>
-  <%= submit_tag "Search", :name=> nil,class:"btn btn-outline-success my-2 my-sm-0"%>
-<%end%>
-<%= form_tag resturant_items_path,:method=> :get do %>
-  <%= collection_select(:item,:category_id,Category.all,:id,:name )%>
-  <%= submit_tag "Filter", :name=> nil%>
-<%end%>
-<%if @categories%>
-<div class="btn-group btn-group-toggle  button-margin-left" data-toggle="buttons">
-    <%=link_to "All",resturant_items_path,class: "btn btn-secondary active "%>
-</div>
-<%@categories.each do |category|%>
-  <div class="btn-group btn-group-toggle  button-margin-left" data-toggle="buttons">
-    <%=link_to category.name,resturant_items_path(:cate=> category.id),class: "btn btn-secondary active "%>
-  </div>
-  </div>
-<%end%>
-<%end%>
-<% @resturant.in_groups_of(4, false).each do |group| %>
-  <div class='row'>
-<% group.each do |item| %>
- <div class='col-md-3'>
-   <div class="card card-margin" style="width: 25rem;">
-      <% if item.avatar!=nil%>
-        <%=image_tag item.avatar, class:"card-img-top",height:"250px" if item.avatar.attached? %>
-      <%end%>
-      <div class="card-body">
-        <h3 class="card-title"><%=item.name%><h1>
-      </div>
-      <div class="card-body">
-        <p class="card-text"><%=item.description%><p>
-      </div>
-      <div class="card-body">
-        <p class="card-text price"><%=item.price%> Rs<p>
-      </div>
-      <%if current_user%>
-        <% if current_user.status=="user"%>
-            <div class="card-body display-no-card">
-              <%= link_to "Edit", edit_resturant_item_path(@res,item), class: "card-link"%>
-              <%= link_to "Delete", resturant_item_path(@res,item) , :confirm =>"Are you sure?", :method =>:delete, class:"card-link delete-color" %>
-            </div>
-        <% elsif current_user.status=="admin" %>
-            <div class="card-body ">
-              <%= link_to "Edit", edit_resturant_item_path(@res,item), class: "card-link "%>
-              <%= link_to "Delete", resturant_item_path(@res,item) , :confirm =>"Are you sure?", :method =>:delete, class: "card-link link-color" %>
-            </div>
-        <%end%>
-      <%end%>
-      <%if current_user%>
-         <%cart= Cart.find_by(user_id: current_user.id)%>
-      <% else %>
-         <%cart=Cart.find_by(id: session[:cart])%>
-      <%end%>
-        <div class="card-body">
-          <%if !cart.nil?%>
-            <% if !cart.cart_items.exists?(item_id: item.id) %>
-                <%= form_tag carts_path,:method=> :post do %>
-                    <div class="form-group">
-                      <div class="col-md-8">
-                        <%= hidden_field_tag :quantity,class: "form-control"%>
-                        <%= hidden_field_tag :item ,item.id %>
-                      </div>
-                      <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary"%>
-                    </div>
-                <%end%>
-            <% elsif CartItem.exists?(item_id: item.id) %>
-                <%= form_tag carts_path,:method=> :post do %>
-                    <div class="form-group">
-                      <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary",disabled: true%>
-                    </div>
-                <%end%>
-            <%end%>
-          <%else%>
-             <%= form_tag carts_path,:method=> :post do %>
-                    <div class="form-group">
-                      <div class="col-md-8">
-                        <%= hidden_field_tag :quantity,class: "form-control"%>
-                        <%= hidden_field_tag :item ,item.id %>
-                      </div>
-                      <%= submit_tag "Add to Cart", class: "btn btn-default btn-primary"%>
-                    </div>
-                <%end%>
-          <%end%>
-        </div>
 
+<div style="margin-bottom:20px;" class="row">
+  <%if @categories%>
+    <div class="btn-group btn-group-toggle  button-margin-left" data-toggle="buttons">
+        <%=link_to "All",resturant_items_path,class: "btn btn-secondary active "%>
     </div>
-  </div>
-<% end %>
-</div>
-<%end%>
-  <%if current_user%>
-    <% if current_user.status=="user"%>
-      <div class="col-md-12 text-center display-no-card">
-          <%= link_to "Add Product" , new_resturant_item_path,class: "btn btn-primary btn-lg button-margin" %>
-      </div>
-    <% elsif current_user.status=="admin"%>
-        <div class="col-md-12 text-center">
-          <%= link_to "Add Product" , new_resturant_item_path,class: "btn btn-primary btn-lg button-margin" %>
+    <%@categories.each do |category|%>
+      <div class="btn-group btn-group-toggle  button-margin-left" data-toggle="buttons">
+        <%=link_to category.name,resturant_items_path(:cate=> category.id),class: "btn btn-secondary active "%>
       </div>
     <%end%>
   <%end%>
-   <% if !user_signed_in? %>
-      <div class="col-md-12 text-center display-no-card">
-          <%= link_to "Add Product" , new_resturant_item_path,class: "btn btn-primary btn-lg button-margin" %>
-      </div>
-   <%end%>
+  <div class="search_form">
+    <%= form_tag resturant_items_path,:method=> :get, class:"form-inline form-margin" do %>
+      <%= text_field_tag :search, params[:search],class:"form-control mr-sm-2" %>
+      <%= submit_tag "Search", :name=> nil,class:"btn btn-outline-success my-2 my-sm-0"%>
+    <%end%>
+  </div>
+</div>
+ <%if current_user%>
+      <% if current_user.status=="user"%>
+        <div class="col-md-12 text-center display-no-card">
+            <%= link_to "Add Product" , new_resturant_item_path,class: "btn btn-primary btn-lg button-margin" %>
+        </div>
+      <% elsif current_user.status=="admin"%>
+          <div class="col-md-12 text-center">
+            <%= link_to "Add Product" , new_resturant_item_path,class: "btn btn-primary btn-lg button-margin" %>
+        </div>
+      <%end%>
+  <%end%>
+  <% if !user_signed_in? %>
+        <div class="col-md-12 text-center display-no-card">
+            <%= link_to "Add Product" , new_resturant_item_path,class: "btn btn-primary btn-lg button-margin" %>
+        </div>
+ <%end%>
+<div class="items-container">
+  <%= render partial: 'shared/items', locals: { resturant: @resturant } %>
+</div>

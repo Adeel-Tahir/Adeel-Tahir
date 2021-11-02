@@ -1,13 +1,5 @@
-<% @resturants.each do |item| %>
-
-    <h1>Product:<%=item.name%><h1>
-    <% if item.avatar!=nil%>
-      <p>
-        <%=image_tag item.avatar, width: "200px" if item.avatar.attached? %>
-      </p>
-    <%end%>
-
-    <h4>Descripion:<%=item.description%><h1>
-    <h4>Price:<%=item.price%><h1>
-  <br>
-<% end %>
+<section class="mb-5">
+  <div class="items-show-container">
+    <%= render partial: 'shared/show_item', locals: { item: @item } %>
+  </div>
+</section>

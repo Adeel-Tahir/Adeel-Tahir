@@ -4,7 +4,6 @@ class ItemsController < ApplicationController
   before_action :check_permission, only: %i[edit update destroy new create]
   before_action :find_resturant, only: %i[index create show]
   before_action :find_item, only: %i[edit update destroy]
-  before_action :category_list, only: %i[edit create new]
 
   def index
     @categories = Category.all
@@ -19,8 +18,7 @@ class ItemsController < ApplicationController
   def create
     @item = @res.items.new(item_params)
     if @item.save
-      flash[:notice] = 'Item Created'
-      redirect_to resturant_items_path
+      redirect_to resturant_items_path, notice: 'Item Created'
     else
       render :new
     end
@@ -30,7 +28,9 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @resturant = @res.items
+    @item = Item.find_by(id: params[:id])
+    @resturant = @item.resturant.items
+    redirect_to resturants_path, alert: 'Item not found' if @item.nil?
   end
 
   def edit; end
@@ -56,11 +56,11 @@ class ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:name, :price, :description, :avatar, category_ids: [])
+    params.require(:item).permit(:name, :price, :description, :status, :avatar, category_ids: [])
   end
 
   def check_permission
-    # authorize current_user
+    authorize Item
   end
 
   def find_resturant
@@ -69,10 +69,6 @@ class ItemsController < ApplicationController
 
   def find_item
     @item = Item.find_by(id: params[:id])
-  end
-
-  def category_list
-    @category_list = Category.all.pluck(:name, :id).to_h
   end
 
   def search_item
@@ -84,8 +80,12 @@ class ItemsController < ApplicationController
   def find_category_by_resturant
     cate = params[:cate]
     if !cate.nil?
-      cat = Category.find_by(id: cate)
-      @resturant = cat.items.where(resturant_id: params[:resturant_id])
+      @cat = Category.find_by(id: cate)
+      if @cat.nil?
+        redirect_to resturant_items_path, alert: 'Category not found'
+      else
+        @resturant = @cat.items.find_resturant_item(params[:resturant_id])
+      end
     else
       @resturant = @res.items
     end

@@ -1,0 +1,4 @@
+toastr.success('Item Added to Cart')
+$('.items-container').html('<%= j render partial: 'shared/items', locals: {resturant: @resturant} %>')
+$('.items-show-container').html('<%= j render partial: 'shared/show_item', locals: {item: @item} %>')
+<%# toastr.success('Item Added to Cart') %>

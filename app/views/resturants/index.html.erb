@@ -1,14 +1,34 @@
+<% if current_user %>
+ <% if current_user.status=="admin"%>
+    <div class="col-md-12 text-center">
+      <%= link_to "Add Resturant" , new_resturant_path,class: "btn btn-primary btn-lg button-margin" %>
+    </div>
+ <% elsif current_user.status=="user" %>
+    <div class="col-md-12 text-center display-no-card">
+      <%= link_to "Add Resturant" , new_resturant_path,class: "btn btn-primary btn-lg button-margin" %>
+    </div>
+ <%end%>
+<%end%>
+
+  <% if !user_signed_in? %>
+      <div class="col-md-12 text-center display-no-card">
+      <%= link_to "Add Resturant" , new_resturant_path,class: "btn btn-primary btn-lg button-margin" %>
+    </div>
+ <%end%>
+
 <% @resturants.in_groups_of(4, false).each do |group| %>
   <div class='row'>
 <% group.each do |resturant| %>
  <div class='col-md-3'>
    <div class="card card-margin" style="width: 25rem;">
-      <% if resturant.avatar!=nil%>
-        <%=image_tag resturant.avatar, class:"card-img-top",height:"250px" if resturant.avatar.attached? %>
+      <%= link_to resturant_items_path(resturant) do%>
+        <% if resturant.avatar!=nil%>
+          <%=image_tag resturant.avatar, class:"card-img-top",height:"250px" if resturant.avatar.attached? %>
+        <%end%>
+        <div class="card-body">
+          <h3 class="card-title"> <%=resturant.name%><h3>
+        </div>
       <%end%>
-      <div class="card-body">
-        <h3 class="card-title"> <%= link_to "#{resturant.name}",resturant_items_path(resturant)%><h1>
-      </div>
       <% if current_user %>
         <% if current_user.status=="admin"%>
           <div class="card-body">
@@ -34,20 +54,3 @@
 <% end %>
 </div>
 <%end%>
-<% if current_user %>
- <% if current_user.status=="admin"%>
-    <div class="col-md-12 text-center">
-      <%= link_to "Add Resturant" , new_resturant_path,class: "btn btn-primary btn-lg button-margin" %>
-    </div>
- <% elsif current_user.status=="user" %>
-    <div class="col-md-12 text-center display-no-card">
-      <%= link_to "Add Resturant" , new_resturant_path,class: "btn btn-primary btn-lg button-margin" %>
-    </div>
- <%end%>
-<%end%>
-
-  <% if !user_signed_in? %>
-      <div class="col-md-12 text-center display-no-card">
-      <%= link_to "Add Resturant" , new_resturant_path,class: "btn btn-primary btn-lg button-margin" %>
-    </div>
- <%end%>

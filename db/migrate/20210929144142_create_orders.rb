@@ -4,8 +4,8 @@ class CreateOrders < ActiveRecord::Migration[5.2]
   def change
     create_table :orders do |t|
       t.integer :status, null: false
-      t.integer :total, null: false
-      t.datetime :order_time
+      t.integer :total, default: 0
+      t.belongs_to :user, index: true
       t.timestamps
     end
   end

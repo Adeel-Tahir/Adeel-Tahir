@@ -6,8 +6,10 @@ Rails.application.routes.draw do
   resources :resturants do
     resources :items
   end
-  resources :carts, except: :show
+  resources :carts
   resources :cart_items, only: %i[update destroy edit]
 
   resources :item_orders, :categories
+
+  resources :orders, only: %i[index new update create show]
 end
