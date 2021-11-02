@@ -19,9 +19,12 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = Order.new(user_id: current_user&.id, status: 0, total: current_user.cart.total)
+    @cart=current_user.cart
+    @cart_items=@cart.items
+    @order = Order.new(user_id: current_user&.id, status: 0, total: @cart.total)
     if @order.save
-      shift_data_to_order
+      create_order
+      redirect_to orders_path, notice: 'Thank you for Ordering,Order Confirmed'
     else
       redirect_to resturants_path, alert: 'Order not created'
     end
@@ -42,14 +45,6 @@ class OrdersController < ApplicationController
   end
 
   private
-
-  def destroy_cart_items
-    @cart = Cart.find_by(user_id: current_user&.id)
-    @cart_items = @cart.cart_items
-    @cart_items.each(&:destroy)
-    redirect_to resturants_path, notice: 'Thank you for Ordering,Order Confirmed'
-  end
-
   def order_params
     params.require(:order).permit(:total, :status)
   end
@@ -58,20 +53,11 @@ class OrdersController < ApplicationController
     authenticate_user!
   end
 
-  def shift_data_to_order
-    @cart = Cart.find_by(user_id: current_user&.id)
-    @cart_items = @cart.cart_items
-    order = Order.find_by(id: params[:order])
-    create_order(order)
-  end
-
-  def create_order(order)
-    @cart_items.each do |items|
-      cart_item = CartItem.find_by(item_id: items.item_id)
-      item = Item.find_by(id: cart_item.item_id)
-      @order.item_orders.create(order: order, quantity: items.quantity, item_id: items.item_id, price: item.price,
+  def create_order
+    @cart.cart_items.each do |cart_item|
+      @order.item_orders.create(order_id: @order.id, quantity: cart_item.quantity, item_id: cart_item.item_id, price: cart_item.item.price,
                                 subtotal: cart_item.quantity * cart_item.item.price)
     end
-    destroy_cart_items
+    @cart.destroy
   end
 end

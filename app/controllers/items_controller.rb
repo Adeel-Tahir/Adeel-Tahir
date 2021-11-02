@@ -4,7 +4,6 @@ class ItemsController < ApplicationController
   before_action :check_permission, only: %i[edit update destroy new create]
   before_action :find_resturant, only: %i[index create show]
   before_action :find_item, only: %i[edit update destroy]
-  before_action :category_list, only: %i[edit create new]
 
   def index
     @categories = Category.all
@@ -30,7 +29,7 @@ class ItemsController < ApplicationController
 
   def show
     @item = Item.find_by(id: params[:id])
-    @resturant=@item.resturant.items
+    @resturant = @item.resturant.items
     redirect_to resturants_path, alert: 'Item not found' if @item.nil?
   end
 
@@ -70,10 +69,6 @@ class ItemsController < ApplicationController
 
   def find_item
     @item = Item.find_by(id: params[:id])
-  end
-
-  def category_list
-    @category_list = Category.all.pluck(:name, :id).to_h
   end
 
   def search_item
