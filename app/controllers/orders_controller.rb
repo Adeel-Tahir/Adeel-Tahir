@@ -2,6 +2,7 @@
 
 class OrdersController < ApplicationController
   before_action :check_authentication, only: %i[index new update create show]
+  before_action :find_order, only: %i[update show]
 
   def index
     return unless current_user
@@ -13,7 +14,6 @@ class OrdersController < ApplicationController
       @orders = Order.all
     end
     @orders = @orders.filter_by_status(params[:status]) if params[:status].present?
-
   end
 
   def new
@@ -33,7 +33,6 @@ class OrdersController < ApplicationController
   end
 
   def update
-    @order = Order.find_by(id: params[:id])
     if @order.update(order_params)
       redirect_to orders_path, notice: 'Order Item updated'
     else
@@ -42,7 +41,6 @@ class OrdersController < ApplicationController
   end
 
   def show
-    @order = Order.find_by(id: params[:id])
     redirect_to orders_path, alert: 'Order not Found' if @order.nil?
   end
 
@@ -62,5 +60,9 @@ class OrdersController < ApplicationController
                                 price: cart_item.item.price, subtotal: cart_item.quantity * cart_item.item.price)
     end
     @cart.destroy
+  end
+
+  def find_order
+    @order = Order.find_by(id: params[:id])
   end
 end

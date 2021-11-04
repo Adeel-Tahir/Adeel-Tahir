@@ -5,7 +5,7 @@ class CategoriesController < ApplicationController
   before_action :check_permissions, only: %i[edit update destroy create new]
 
   def index
-    @categories = Category.all
+    all_category
   end
 
   def new
@@ -24,7 +24,7 @@ class CategoriesController < ApplicationController
   end
 
   def show
-    @categories = Category.all
+    all_category
   end
 
   def edit; end

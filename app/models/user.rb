@@ -19,5 +19,4 @@ class User < ApplicationRecord
   # def user?
   #   status.eql?('user')
   # end
-
 end
