@@ -2,7 +2,7 @@
     <%if @orders%>
         <%@order=@orders.first%>
         <%= form_tag orders_path,:method=> :get do %>
-            <span><%= select_tag(:status,options_for_select(Order.statuses.map{ |key, value| [key.titleize, Order.statuses.key(value)]})) %></span>
+            <span><%= select_tag(:status,options_for_select(Order.statuses.map{ |key, value| [key.titleize, Order.statuses.key(value)]},:selected =>params[:status])) %></span>
             <span><%= submit_tag "Filter",:status => nil, class: "btn btn-default btn-primary btn-sm"%></span>
         <%end%>
         <table class="table_order">
