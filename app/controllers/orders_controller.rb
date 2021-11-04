@@ -8,10 +8,12 @@ class OrdersController < ApplicationController
 
     if current_user.user?
       @orders = current_user.orders
+
     elsif current_user.admin?
       @orders = Order.all
-      @orders = @orders.filter_by_status(params[:status]) if params[:status].present?
     end
+    @orders = @orders.filter_by_status(params[:status]) if params[:status].present?
+
   end
 
   def new
@@ -19,8 +21,8 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @cart=current_user.cart
-    @cart_items=@cart.items
+    @cart = current_user.cart
+    @cart_items = @cart.items
     @order = Order.new(user_id: current_user&.id, status: 0, total: @cart.total)
     if @order.save
       create_order
@@ -45,6 +47,7 @@ class OrdersController < ApplicationController
   end
 
   private
+
   def order_params
     params.require(:order).permit(:total, :status)
   end
@@ -55,8 +58,8 @@ class OrdersController < ApplicationController
 
   def create_order
     @cart.cart_items.each do |cart_item|
-      @order.item_orders.create(order_id: @order.id, quantity: cart_item.quantity, item_id: cart_item.item_id, price: cart_item.item.price,
-                                subtotal: cart_item.quantity * cart_item.item.price)
+      @order.item_orders.create(order_id: @order.id, quantity: cart_item.quantity, item_id: cart_item.item_id,
+                                price: cart_item.item.price, subtotal: cart_item.quantity * cart_item.item.price)
     end
     @cart.destroy
   end

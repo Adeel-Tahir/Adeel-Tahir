@@ -12,7 +12,12 @@ class User < ApplicationRecord
 
   enum status: { admin: 0, user: 1 }
 
-  # validates :email,uniqueness: {message: "must have unique email"}, if: :current_user
-  # validates :fullname, presence: true, allow_blank: false, if: :current_user
-  # validates_length_of :fullname, minimum: 2, maximum: 32 ,if: :current_user
+  # def admin?
+  #   status.eql?('admin')
+  # end
+
+  # def user?
+  #   status.eql?('user')
+  # end
+
 end

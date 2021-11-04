@@ -31,14 +31,13 @@
             <%= form_for @car,html:{remote: true} do |f|%>
               <div class="form-group">
                 <div class="col-md-12">
-                  <%= f.number_field :quantity,required:true, class: "form-control"%>
+                  <%= f.number_field :quantity,value: @car.quantity, min: 1,required:true, class: "form-control",onchange: 'this.form.submit();'%>
                   <%= f.hidden_field :subtotal,value:sub_total(@car)%>
                 </div>
               </div>
               <div class=" card_last row">
               <div class="card-body">
               <%= link_to "Delete", @car , :confirm =>"Are you sure?",:remote => true,:method =>:delete, html:{remote: true},class: "card-link link-color" %>
-                <span><%= f.submit "Update Cart", class: "btn btn-default btn-primary"%></span>
               </div>
               </div>
               <div class="sub row">

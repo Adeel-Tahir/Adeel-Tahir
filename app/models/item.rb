@@ -21,7 +21,7 @@ class Item < ApplicationRecord
 
   scope :find_resturant_item, ->(resturant) { where(resturant_id: resturant) }
 
-  def self.search(params)
-    where("LOWER(name) LIKE '%#{params}%'")
+  def self.search(item_name)
+    where("LOWER(name) LIKE '%#{item_name}%'")
   end
 end

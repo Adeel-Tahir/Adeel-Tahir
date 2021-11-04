@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Order < ApplicationRecord
+
   scope :filter_by_status, ->(status) { where status: status }
 
   has_many :item_orders, dependent: :destroy

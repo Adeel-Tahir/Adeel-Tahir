@@ -37,7 +37,7 @@
                   <td><%=@order.updated_at%></td>
                   <%order_item=ItemOrder.find_by(item_id: item.id)%>
                   <td><%=order_item.quantity%></td>
-                  <td><p> Rs <%=item.price%></p></td>
+                  <td><p> Rs <%=order_item.price%></p></td>
 
                 <%@car=item.item_orders[0]%>
                 <td><p> Rs <%=@car.subtotal%></p></td>
