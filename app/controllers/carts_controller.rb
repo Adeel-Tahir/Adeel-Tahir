@@ -11,7 +11,6 @@ class CartsController < ApplicationController
               Cart.find_by(id: session[:cart])
 
             end
-    # byebug
     flash[:notice] = 'Cart is Empty' if @cart.cart_items.blank?
   end
 
@@ -21,21 +20,15 @@ class CartsController < ApplicationController
 
   def create
     @item = Item.find_by(id: params[:item])
-    @res = @item.resturant
-    @resturant = @res.items
+    @resturant = @item.resturant.items
     ActiveRecord::Base.transaction do
-      if current_user
-        @cart=Cart.find_by(user_id: current_user.id) || Cart.create(user_id: current_user.id)
-      else
-        @cart = Cart.find_by(id: session[:cart])
-      end
-      find_cart_items
+      @cart = if current_user
+                Cart.find_or_create_by(user_id: current_user.id)
+              else
+                Cart.find_by(id: session[:cart])
+              end
+      cart_items_create
     end
-  end
-
-  def edit
-    item = Item.find_by(id: params[:id])
-    @cart = item.carts
   end
 
   def update
@@ -60,7 +53,7 @@ class CartsController < ApplicationController
     params.require(:cart).permit(:id, :user_id, :total, item_ids: [])
   end
 
-  def find_cart_items
+  def cart_items_create
     item = Item.find(params[:item])
     @cart.cart_items.create(item: item, quantity: 1)
     respond_to do |format|

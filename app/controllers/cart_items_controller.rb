@@ -20,11 +20,6 @@ class CartItemsController < ApplicationController
     render :edit, flash[:alert] = e.record.errors.full_messages.to_sentence
   end
 
-  def edit
-    item = Item.find_by(id: params[:id])
-    @cart = item.cart_items
-  end
-
   private
 
   def cart_item_params

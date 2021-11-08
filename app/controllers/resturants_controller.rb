@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ResturantsController < ApplicationController
-  before_action :find_resturant, only: %i[edit update destroy show]
+  before_action :find_resturant, only: %i[edit update destroy]
   before_action :check_permissions, only: %i[edit update destroy create new]
 
   def index

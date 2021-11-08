@@ -19,8 +19,8 @@
           <%if current_user%>
             <%if admin? %>
               <div class="card-body ">
-                <%= link_to "Edit", edit_resturant_item_path(@res,item), class: "card-link "%>
-                <%= link_to "Delete", resturant_item_path(@res,item) , :confirm =>"Are you sure?", :method =>:delete, class: "card-link link-color" %>
+                <%= link_to "Edit", edit_resturant_item_path(@resturant,item), class: "card-link "%>
+                <%= link_to "Delete", resturant_item_path(@resturant,item) , :confirm =>"Are you sure?", :method =>:delete, class: "card-link link-color" %>
               </div>
             <%end%>
           <%end%>

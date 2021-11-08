@@ -5,7 +5,6 @@ class OrdersController < ApplicationController
   before_action :find_order, only: %i[update show]
 
   def index
-
     if current_user.user?
       @orders = current_user.orders
     elsif current_user.admin?

@@ -7,7 +7,7 @@ class ItemsController < ApplicationController
 
   def index
     @categories = Category.all
-    @pagy, @resturant = pagy(@res.items)
+    @pagy, @resturant = pagy(@resturant.items)
     search_item
   end
 
@@ -16,7 +16,7 @@ class ItemsController < ApplicationController
   end
 
   def create
-    @item = @res.items.new(item_params)
+    @item = @resturant.items.new(item_params)
 
     begin
       @item.save!
@@ -61,7 +61,7 @@ class ItemsController < ApplicationController
   end
 
   def find_resturant
-    @res = Resturant.find_by(id: params[:resturant_id])
+    @resturant = Resturant.find_by(id: params[:resturant_id])
   end
 
   def find_item
