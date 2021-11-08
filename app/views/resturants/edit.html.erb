@@ -1,19 +1,24 @@
-<%= form_for @resturant do |f|%>
-  <div class=form-width>
-    <div class="form-group">
-      <%= f.label :name,"Name",class: "col-md-4 control-label"%>
-     <div class="col-md-8">
-       <%= f.text_field :name, class: "form-control"%>
+<div class="container2">
+  <div class="border shadow p-3 mb-5 bg-white rounded">
+    <h4 class="container1">Update Resturant Form</h4>
+    <%= form_for @resturant do |f|%>
+      <div class=form-width>
+        <div class="form-group">
+          <%= f.label :name,"Name",class: "col-md-4 control-label"%>
+        <div class="col-md-12">
+          <%= f.text_field :name,required:true, class: "form-control"%>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label :image,"Picture",class: "col-md-4 control-label"%>
+        <div class="col-md-12">
+          <%= f.file_field :image,direct_upload: true, accept: 'image/jpg,image/jpeg,image/png,image/gif',required:true,class: "form-control"%>
+        </div>
+        </div>
+        <div>
+          <%= f.submit "Update Resturant" ,class: "btn btn-default btn-primary btn-margin"%>
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <%= f.label :avatar,"Picture",class: "col-md-4 control-label"%>
-     <div class="col-md-8">
-      <%= f.file_field :avatar, class: "form-control"%>
-     </div>
-    </div>
-    <div>
-      <%= f.submit "Update Resturant" ,class: "btn btn-default btn-primary btn-margin"%>
-    </div>
+    <%end%>
   </div>
-<%end%>
+</div>

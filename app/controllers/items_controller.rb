@@ -3,11 +3,11 @@
 class ItemsController < ApplicationController
   before_action :check_permission, only: %i[edit update destroy new create]
   before_action :find_resturant, only: %i[index create show]
-  before_action :find_item, only: %i[edit update destroy]
+  before_action :find_item, only: %i[edit update destroy show]
 
   def index
     @categories = Category.all
-    @resturant = @res.items
+    @pagy, @resturant = pagy(@resturant.items)
     search_item
   end
 
@@ -16,19 +16,18 @@ class ItemsController < ApplicationController
   end
 
   def create
-    @item = @res.items.new(item_params)
-    if @item.save
+    @item = @resturant.items.new(item_params)
+
+    begin
+      @item.save!
       redirect_to resturant_items_path, notice: 'Item Created'
-    else
-      render :new
+    rescue ActiveRecord::RecordInvalid => e
+      redirect_to new_resturant_item_path(resturant_id: @item.resturant.id),
+                  alert: e.record.errors.full_messages.to_sentence
     end
-    cat_id = params[:item][:id]
-    cat = Category.find_by(id: cat_id)
-    @items.categorizations.create(category: cat) unless cat.nil?
   end
 
   def show
-    @item = Item.find_by(id: params[:id])
     @resturant = @item.resturant.items
     redirect_to resturants_path, alert: 'Item not found' if @item.nil?
   end
@@ -36,19 +35,17 @@ class ItemsController < ApplicationController
   def edit; end
 
   def update
-    if @item.update(item_params)
-      flash[:notice] = 'Item Updated'
-      redirect_to resturant_items_path(resturant_id: @item.resturant.id)
-    else
-      render :edit, flash[:alert] = 'Item not Updated'
-    end
+    @item&.update!(item_params)
+    redirect_to resturant_items_path(resturant_id: @item.resturant.id), notice: 'Item Updated'
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to edit_resturant_item(resturant_id: @item.resturant.id), alert: e.record.errors.full_messages
   end
 
   def destroy
-    if @item.destroy
+    if @item&.destroy
       flash[:notice] = 'Item deleted'
     else
-      flash[:alert] = 'Item can not be deleted'
+      flash[:alert] = @item.errors.full_messages.to_sentence
     end
     redirect_to resturant_items_path
   end
@@ -56,7 +53,7 @@ class ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:name, :price, :description, :status, :avatar, category_ids: [])
+    params.require(:item).permit(:name, :price, :description, :status, :image, category_ids: [])
   end
 
   def check_permission
@@ -64,34 +61,22 @@ class ItemsController < ApplicationController
   end
 
   def find_resturant
-    @res = Resturant.find_by(id: params[:resturant_id])
+    @resturant = Resturant.find_by(id: params[:resturant_id])
   end
 
   def find_item
     @item = Item.find_by(id: params[:id])
   end
 
+  def find_category_by_resturant
+    return if params[:cate].nil?
+
+    cat = Category.find_by(id: params[:cate])
+    @resturant = cat.items.find_resturant_item(params[:resturant_id])
+  end
+
   def search_item
     find_category_by_resturant
-    search_resturant
-    @resturant = @resturant.filter1(params[:item][:category_id]) if params[:item] && !params[:item][:category_id].empty?
-  end
-
-  def find_category_by_resturant
-    cate = params[:cate]
-    if !cate.nil?
-      @cat = Category.find_by(id: cate)
-      if @cat.nil?
-        redirect_to resturant_items_path, alert: 'Category not found'
-      else
-        @resturant = @cat.items.find_resturant_item(params[:resturant_id])
-      end
-    else
-      @resturant = @res.items
-    end
-  end
-
-  def search_resturant
-    @resturant = @resturant.search(params[:search].downcase) if params[:search].present?
+    @resturant = @resturant.search_item_name(params[:search].downcase) if params[:search].present?
   end
 end

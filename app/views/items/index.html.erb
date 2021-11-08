@@ -2,7 +2,7 @@
 <div style="margin-bottom:20px;" class="row">
   <%if @categories%>
     <div class="btn-group btn-group-toggle  button-margin-left" data-toggle="buttons">
-        <%=link_to "All",resturant_items_path,class: "btn btn-secondary active "%>
+      <%=link_to "All",resturant_items_path,class: "btn btn-secondary active "%>
     </div>
     <%@categories.each do |category|%>
       <div class="btn-group btn-group-toggle  button-margin-left" data-toggle="buttons">
@@ -17,22 +17,18 @@
     <%end%>
   </div>
 </div>
- <%if current_user%>
-      <% if current_user.status=="user"%>
-        <div class="col-md-12 text-center display-no-card">
-            <%= link_to "Add Product" , new_resturant_item_path,class: "btn btn-primary btn-lg button-margin" %>
-        </div>
-      <% elsif current_user.status=="admin"%>
-          <div class="col-md-12 text-center">
-            <%= link_to "Add Product" , new_resturant_item_path,class: "btn btn-primary btn-lg button-margin" %>
-        </div>
-      <%end%>
+<%if current_user%>
+  <%if admin?%>
+    <div class="col-md-12 text-center">
+      <%= link_to "Add Product" , new_resturant_item_path,class: "btn btn-primary btn-lg button-margin" %>
+    </div>
   <%end%>
-  <% if !user_signed_in? %>
-        <div class="col-md-12 text-center display-no-card">
-            <%= link_to "Add Product" , new_resturant_item_path,class: "btn btn-primary btn-lg button-margin" %>
-        </div>
- <%end%>
+<%end%>
+<% if !user_signed_in? %>
+  <div class="col-md-12 text-center display-no-card">
+    <%= link_to "Add Product" , new_resturant_item_path,class: "btn btn-primary btn-lg button-margin" %>
+  </div>
+<%end%>
 <div class="items-container">
   <%= render partial: 'shared/items', locals: { resturant: @resturant } %>
 </div>

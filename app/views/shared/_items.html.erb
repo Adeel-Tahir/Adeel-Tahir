@@ -1,93 +1,85 @@
 <% @resturant.in_groups_of(4, false).each do |group| %>
   <div class='row'>
     <% group.each do |item| %>
-        <div class='col-md-3'>
-          <div class="card card-margin" style="width: 25rem;">
-            <%= link_to resturant_item_path(@resturant,item.id) do%>
-              <% if item.avatar!=nil%>
-                <%=image_tag item.avatar, class:"card-img-top",height:"250px" if item.avatar.attached? %>
-              <%end%>
-              <div class="row">
-                <div class="card-body">
-                  <h3 class="card-title"><%=item.name%><h1>
-                </div>
-                <div class="card-body">
-                  <p class="card-text price"><%=item.price%> Rs<p>
-                </div>
+      <div class='col-md-3'>
+        <div class="card card-margin" style="width: 25rem;">
+          <%= link_to resturant_item_path(@resturant,item.id) do%>
+            <% if item.image!=nil%>
+              <%=image_tag item.image, class:"card-img-top",height:"250px" if item.image.attached? %>
+            <%end%>
+            <div class="row">
+              <div class="card-body">
+                <h3 class="card-title"><%=item.name%><h1>
+              </div>
+              <div class="card-body">
+                <p class="card-text price"><%=item.price%> Rs<p>
+              </div>
+            </div>
+          <%end%>
+          <%if current_user%>
+            <%if admin? %>
+              <div class="card-body ">
+                <%= link_to "Edit", edit_resturant_item_path(@resturant,item), class: "card-link "%>
+                <%= link_to "Delete", resturant_item_path(@resturant,item) , :confirm =>"Are you sure?", :method =>:delete, class: "card-link link-color" %>
               </div>
             <%end%>
-            <%if current_user%>
-              <% if current_user.status=="user"%>
-                  <div class="card-body display-no-card">
-                    <%= link_to "Edit", edit_resturant_item_path(@res,item), class: "card-link"%>
-                    <%= link_to "Delete", resturant_item_path(@res,item) , :confirm =>"Are you sure?", :method =>:delete, class:"card-link delete-color" %>
-                  </div>
-              <% elsif current_user.status=="admin" %>
-                  <div class="card-body ">
-                    <%= link_to "Edit", edit_resturant_item_path(@res,item), class: "card-link "%>
-                    <%= link_to "Delete", resturant_item_path(@res,item) , :confirm =>"Are you sure?", :method =>:delete, class: "card-link link-color" %>
-                  </div>
-              <%end%>
-            <%end%>
-            <%if current_user%>
-              <%cart= Cart.find_by(user_id: current_user.id)%>
-            <% else %>
-              <%cart=Cart.find_by(id: session[:cart])%>
-            <%end%>
-            <div class="card-body">
-              <%if !cart.nil?%>
-                <% if !cart.cart_items.exists?(item_id: item.id) %>
-                    <%if item.status=="available" %>
+          <%end%>
+          <%if current_user%>
+            <%cart= Cart.find_by(user_id: current_user.id)%>
+          <% else %>
+            <%cart=Cart.find_by(id: session[:cart])%>
+          <%end%>
+          <div class="card-body">
+            <%if !cart.nil?%>
+              <% if !cart.cart_items.exists?(item_id: item.id) %>
+                <%if item.status=="Available" %>
+                  <%= form_with url: carts_path,html:{remote: true} do |f| %>
+                    <div class="form-group">
+                      <div class="col-md-8">
+                        <%= f.hidden_field :quantity%>
+                        <%= f.hidden_field :item ,value:item.id %>
+                      </div>
+                      <%if !current_user || user?%>
+                        <%= f.submit "Add to Cart",class: "btn btn-default btn-primary hidden_button",disabled:false %>
+                      <%end%>
+                    </div>
+                  <%end%>
+                <%elsif item.status=="OutOfStock"%>
+                  <button class="btn btn-secondary" disabled>OutOfStock</button>
+                <%end%>
+              <% elsif CartItem.exists?(item_id: item.id) %>
+                  <%if item.status=="Available" %>
                       <%= form_with url: carts_path,html:{remote: true} do |f| %>
                           <div class="form-group">
-                            <div class="col-md-8">
-                              <%= f.hidden_field :quantity%>
-                              <%= f.hidden_field :item ,value:item.id %>
-                            </div>
-                            <%if !current_user || current_user.user?%>
-
-                              <%= f.submit "Add to Cart",class: "btn btn-default btn-primary hidden_button",disabled:false %>
-                            <%end%>
+                          <%if !current_user || user?%>
+                            <%= f.submit "Added to Cart", class: "btn btn-secondary",disabled: true%>
+                          <%end%>
                           </div>
                       <%end%>
-                    <%elsif item.status=="outOfStock"%>
-                        <button class="btn btn-secondary" disabled>outOfStock</button>
-
-                    <%end%>
-                <% elsif CartItem.exists?(item_id: item.id) %>
-                    <%if item.status=="available" %>
-                        <%= form_with url: carts_path,html:{remote: true} do |f| %>
-                            <div class="form-group">
-                            <%if !current_user || current_user.user?%>
-                              <%= f.submit "Added to Cart", class: "btn btn-secondary",disabled: true%>
-                            <%end%>
-                            </div>
-                        <%end%>
-                    <%elsif item.status=="outOfStock"%>
-                        <button class="btn btn-secondary" disabled>outOfStock</button>
-                    <%end%>
-                <%end%>
-              <%else%>
-                <%if item.status=="available"%>
-                    <%= form_with url: carts_path,html:{remote: true} do |f| %>
-                          <div class="form-group">
-                            <div class="col-md-8">
-                              <%= f.hidden_field :quantity,class: "form-control"%>
-                              <%= f.hidden_field :item ,item.id %>
-                            </div>
-                            <%if !current_user || current_user.user?%>
-                              <%= f.submit "Add to Cart", class: "btn btn-default btn-primary hidden_button"%>
-                            <%end%>
-                          </div>
-                      <%end%>
-                  <%elsif item.status=="outOfStock"%>
-                      <button class="btn btn-secondary" disabled>outOfStock</button>
+                  <%elsif item.status=="OutOfStock"%>
+                      <button class="btn btn-secondary" disabled>OutOfStock</button>
                   <%end%>
               <%end%>
-            </div>
+            <%else%>
+              <%if item.status=="Available"%>
+                  <%= form_with url: carts_path,html:{remote: true} do |f| %>
+                        <div class="form-group">
+                          <div class="col-md-8">
+                            <%= f.hidden_field :quantity,class: "form-control"%>
+                            <%= f.hidden_field :item ,item.id %>
+                          </div>
+                          <%if !current_user || user?%>
+                            <%= f.submit "Add to Cart", class: "btn btn-default btn-primary hidden_button"%>
+                          <%end%>
+                        </div>
+                    <%end%>
+                <%elsif item.status=="OutOfStock"%>
+                    <button class="btn btn-secondary" disabled>OutOfStock</button>
+                <%end%>
+            <%end%>
           </div>
         </div>
-
-      <% end %>
-    </div>
+      </div>
+    <%end%>
+  </div>
 <%end%>

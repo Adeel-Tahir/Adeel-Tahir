@@ -5,7 +5,7 @@ class CategoriesController < ApplicationController
   before_action :check_permissions, only: %i[edit update destroy create new]
 
   def index
-    @categories=Category.all
+    @categories = Category.all
   end
 
   def new
@@ -15,34 +15,29 @@ class CategoriesController < ApplicationController
   def create
     @category = Category.new(category_params)
 
-    if @category.save
-      flash[:notice] = 'Category Created'
-      redirect_to categories_path
-    else
-      render :new, flash[:alert] = 'Category cant be Created'
+    begin
+      @category.save!
+      redirect_to categories_path, notice: 'Category Created'
+    rescue ActiveRecord::RecordInvalid => e
+      redirect_to new_category_path, alert: e.record.errors.full_messages.to_sentence
     end
-  end
-
-  def show
-    @categories=Category.all
   end
 
   def edit; end
 
   def update
-    if @category.update(category_params)
-      flash[:notice] = 'Category Updated'
-      redirect_to categories_path
-    else
-      render :edit, flash[:alert] = 'Category not updated'
-    end
+    @category&.update!(category_params)
+    flash[:notice] = 'Category Updated'
+    redirect_to categories_path
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to edit_category_path, alert: e.record.errors.full_messages.to_sentence
   end
 
   def destroy
-    if @category.destroy
+    if @category&.destroy
       flash[:notice] = 'Category deleted'
     else
-      flash[:alert] = 'Category not deleted'
+      flash[:alert] = @category.errors.full_messages.to_sentence
     end
     redirect_to categories_path
   end
@@ -50,7 +45,7 @@ class CategoriesController < ApplicationController
   private
 
   def category_params
-    params.require(:category).permit(:name, :avatar)
+    params.require(:category).permit(:name, :image)
   end
 
   def check_permissions

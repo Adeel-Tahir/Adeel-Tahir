@@ -5,14 +5,12 @@ class OrdersController < ApplicationController
   before_action :find_order, only: %i[update show]
 
   def index
-    return unless current_user
-
     if current_user.user?
       @orders = current_user.orders
-
     elsif current_user.admin?
-      @orders = Order.all
+      @orders = Order.includes(:user)
     end
+
     @orders = @orders.filter_by_status(params[:status]) if params[:status].present?
   end
 
@@ -23,21 +21,19 @@ class OrdersController < ApplicationController
   def create
     @cart = current_user.cart
     @cart_items = @cart.items
-    @order = Order.new(user_id: current_user&.id, status: 0, total: @cart.total)
-    if @order.save
-      create_order
-      redirect_to orders_path, notice: 'Thank you for Ordering,Order Confirmed'
-    else
-      redirect_to resturants_path, alert: 'Order not created'
+    ActiveRecord::Base.transaction do
+      @order = Order.new(user_id: current_user&.id, status: 0, total: @cart.total)
+      @order.save!
+      order_item_create
     end
+    redirect_to orders_path, notice: 'Thank you for Ordering,Order Confirmed'
   end
 
   def update
-    if @order.update(order_params)
-      redirect_to orders_path, notice: 'Order Item updated'
-    else
-      render :edit, flash[:alert] = 'Order Item not updated'
-    end
+    @order&.update!(order_params)
+    redirect_to orders_path, notice: 'Order Item updated'
+  rescue ActiveRecord::RecordInvalid => e
+    render :edit, flash[:alert] = e.record.errors.full_messages.to_sentence
   end
 
   def show
@@ -54,7 +50,7 @@ class OrdersController < ApplicationController
     authenticate_user!
   end
 
-  def create_order
+  def order_item_create
     @cart.cart_items.each do |cart_item|
       @order.item_orders.create(order_id: @order.id, quantity: cart_item.quantity, item_id: cart_item.item_id,
                                 price: cart_item.item.price, subtotal: cart_item.quantity * cart_item.item.price)

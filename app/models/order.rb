@@ -7,10 +7,9 @@ class Order < ApplicationRecord
   has_many :items, through: :item_orders
 
   belongs_to :user
+  delegate :fullname, to: :user, prefix: true
 
   enum status: { ordered: 0, paid: 1, canceled: 2, completed: 3 }
 
-  def self.filter_order_status(params)
-    joins(:statuses).where('status = ?', params)
-  end
+  scope :filter_order_status, ->(params) { joins(:statuses).where('status = ?', params) }
 end

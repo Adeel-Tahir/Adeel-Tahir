@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Item < ApplicationRecord
+  include Concerns::Validatable
+
   has_many :item_orders, dependent: :destroy
   has_many :orders, through: :item_orders
   has_many :categorizations, dependent: :destroy
@@ -10,18 +12,16 @@ class Item < ApplicationRecord
 
   belongs_to :resturant
 
-  has_one_attached :avatar
+  has_one_attached :image
+  validate :correct_image_type
 
   validates :name, presence: { message: 'Please enter name' }
   validates :price, presence: { message: 'Please enter price' },
                     numericality: { greater_than_or_equal_to: 0 }
   validates :description, presence: { message: 'Please enter description' }
 
-  enum status: { available: 0, outOfStock: 1 }
+  enum status: { Available: 0, OutofStock: 1 }
 
   scope :find_resturant_item, ->(resturant) { where(resturant_id: resturant) }
-
-  def self.search(item_name)
-    where("LOWER(name) LIKE '%#{item_name}%'")
-  end
+  scope :search_item_name, ->(item_name) { where("LOWER(name) LIKE '%#{item_name}%'") }
 end

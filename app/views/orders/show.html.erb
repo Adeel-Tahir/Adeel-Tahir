@@ -1,54 +1,52 @@
 <div class="container">
   <%if @order%>
-      <%if current_user.admin?%>
-          <div class="row chng_btn">
-            <span><h3 style="margin-right:10px;">Status:  </h3></span>
-            <%if @order.status=="ordered" || @order.status=="paid"%>
-              <%= form_for @order do |f|%>
-                  <span><%= f.select(:status,options_for_select(Order.statuses.map{ |key, value| [key.titleize, Order.statuses.key(value)]},:selected => f.object.status)) %></span>
-                  <span><%= f.submit "Change", class: "btn btn-default btn-primary btn-sm"%></span>
-              <%end%>
-            <%else%>
-              <span><%=@order.status%></span>
-            <%end%>
-
-          </div>
-      <%end%>
+    <%if admin?%>
+      <div class="row chng_btn">
+        <span><h3 style="margin-right:10px;">Status:  </h3></span>
+        <%if @order.status=="ordered" || @order.status=="paid"%>
+          <%= form_for @order do |f|%>
+            <span><%= f.select(:status,options_for_select(Order.statuses.map{ |key, value| [key.titleize, Order.statuses.key(value)]},:selected => f.object.status)) %></span>
+            <span><%= f.submit "Change", class: "btn btn-default btn-primary btn-sm"%></span>
+          <%end%>
+        <%else%>
+          <span><%=@order.status%></span>
+        <%end%>
+      </div>
+    <%end%>
     <table class="table_order">
-        <thead>
-          <th>Image</th>
-          <th>Product</th>
-          <th>Order Created</th>
-          <th>Order Updated</th>
-          <th>Quantity</th>
-          <th>Price</th>
-          <th>Subtotal</th>
-        </thead>
-        <tbody>
-          <%total=0%>
-            <% @order.items.each do |item| %>
-              <tr>
-                <% if item.avatar!=nil%>
-                  <td class="order_img"><%=image_tag item.avatar,height:"100px" if item.avatar.attached? %></td>
-                <%end%>
-                  <%@resturant=Resturant.find_by(id: item.resturant_id)%>
-                  <td><%=link_to "#{item.name}",resturant_item_path(@resturant,item.id)%></td>
-                  <td><%=@order.created_at%></td>
-                  <td><%=@order.updated_at%></td>
-                  <%order_item=ItemOrder.find_by(item_id: item.id)%>
-                  <td><%=order_item.quantity%></td>
-                  <td><p> Rs <%=order_item.price%></p></td>
-
-                <%@car=item.item_orders[0]%>
-                <td><p> Rs <%=@car.subtotal%></p></td>
-                <%total=total+@car.subtotal%>
-              </tr>
+      <thead>
+        <th>Image</th>
+        <th>Product</th>
+        <th>Order Created</th>
+        <th>Order Updated</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Subtotal</th>
+      </thead>
+      <tbody>
+        <%total=0%>
+        <% @order.items.each do |item| %>
+          <tr>
+            <% if item.image!=nil%>
+              <td class="order_img"><%=image_tag item.image,height:"100px" if item.image.attached? %></td>
             <%end%>
-              <tr>
-                <th colspan='6' style="text-align:right;"><h5 style="margin-right:20px;"><b>Total</b></h5></th>
-                <td><p>Rs <%=total%></p></td>
-            </tr>
-        </tbody>
+            <%@resturant=item.resturant%>
+            <td><%=link_to "#{item.name}",resturant_item_path(@resturant,item.id)%></td>
+            <td><%=@order.created_at%></td>
+            <td><%=@order.updated_at%></td>
+            <%order_item=item.item_orders.first%>
+            <td><%=order_item.quantity%></td>
+            <td><p> Rs <%=order_item.price%></p></td>
+            <%@car=item.item_orders[0]%>
+            <td><p> Rs <%=@car.subtotal%></p></td>
+            <%total=total+@car.subtotal%>
+          </tr>
+        <%end%>
+        <tr>
+          <th colspan='6' style="text-align:right;"><h5 style="margin-right:20px;"><b>Total</b></h5></th>
+          <td><p>Rs <%=total%></p></td>
+        </tr>
+      </tbody>
     </table>
   <%end%>
 </div>

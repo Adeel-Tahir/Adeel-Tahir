@@ -15,8 +15,8 @@
     <% @cart.items.each do |item| %>
       <div class='col-md-3 col-sm-12'>
         <div class="card card-margin" style="width: 25rem;">
-          <% if item.avatar!=nil%>
-            <%=image_tag item.avatar, class:"card-img-top",height:"250px" if item.avatar.attached? %>
+          <% if item.image!=nil%>
+            <%=image_tag item.image, class:"card-img-top",height:"250px" if item.image.attached? %>
           <%end%>
           <div class="row">
             <div class="card-body">
@@ -26,26 +26,24 @@
               <p class="card-text price">Rs <%=item.price%><p>
             </div>
           </div>
-
           <%@car=item.cart_items[0]%>
-            <%= form_for @car,html:{remote: true} do |f|%>
-              <div class="form-group">
-                <div class="col-md-12">
-                  <%= f.number_field :quantity,value: @car.quantity, min: 1,required:true, class: "form-control",onchange: 'this.form.submit();'%>
-                  <%= f.hidden_field :subtotal,value:sub_total(@car)%>
-                </div>
+          <%= form_for @car,html:{remote: true} do |f|%>
+            <div class="form-group">
+              <div class="col-md-12">
+                <%= f.number_field :quantity,value: @car.quantity, min: 1,required:true, class: "form-control",onchange: 'this.form.submit();'%>
+                <%= f.hidden_field :subtotal,value:sub_total(@car)%>
               </div>
-              <div class=" card_last row">
-              <div class="card-body">
-              <%= link_to "Delete", @car , :confirm =>"Are you sure?",:remote => true,:method =>:delete, html:{remote: true},class: "card-link link-color" %>
-              </div>
-              </div>
-              <div class="sub row">
-                <h5> Sub Total: </h5>
-                <p class="sub_p"> Rs <%=sub_total(@car)%></p>
-              </div>
-            <%end%>
-
+            </div>
+            <div class=" card_last row">
+            <div class="card-body">
+            <%= link_to "Delete", @car , :confirm =>"Are you sure?",:remote => true,:method =>:delete, html:{remote: true},class: "card-link link-color" %>
+            </div>
+            </div>
+            <div class="sub row">
+              <h5> Sub Total: </h5>
+              <p class="sub_p"> Rs <%=sub_total(@car)%></p>
+            </div>
+          <%end%>
         </div>
       </div>
     <%end%>
@@ -53,12 +51,10 @@
   <div class="checkout_btn">
     <%if current_user%>
       <%if @cart.cart_items[0]%>
-
         <%= link_to "Checkout",orders_path,:method=>:post,data:{confirm:'Are you sure to confirm order?'},html:{remote: true},class: "btn btn-default btn-primary" %>
       <%end%>
     <%end%>
   </div>
-    <%@ca=Cart.find_by(id: @cart.id)%>
-    <%@ca.total=calculate_total(@cart)%>
-    <%link_to carts_path(@ca.total)%>
+  <%@cart.total=calculate_total(@cart)%>
+  <%link_to carts_path(@cart.total)%>
 <%end%>

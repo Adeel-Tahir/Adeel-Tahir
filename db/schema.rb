@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_072312) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_categories_on_name", unique: true
   end
 
   create_table "categories_resturants", id: false, force: :cascade do |t|
