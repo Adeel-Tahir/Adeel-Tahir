@@ -5,7 +5,7 @@ class ResturantsController < ApplicationController
   before_action :check_permissions, only: %i[edit update destroy create new]
 
   def index
-    @resturants = Resturant.all
+    @pagy, @resturants = pagy(Resturant.all)
   end
 
   def new
@@ -14,12 +14,11 @@ class ResturantsController < ApplicationController
 
   def create
     @resturant = Resturant.new(resturant_params)
-    if @resturant.save
-      flash[:notice] = 'Resturant Created'
-      redirect_to resturants_path(@resturant.id)
-    else
-      flash[:alert] = 'Resturant not Created'
-      render :new
+    begin
+      @resturant.save!
+      redirect_to resturants_path(@resturant.id), notice: 'Resturant Created'
+    rescue ActiveRecord::RecordInvalid => e
+      redirect_to new_resturant_path, alert: e.record.errors.full_messages[0]
     end
   end
 
@@ -28,16 +27,14 @@ class ResturantsController < ApplicationController
   def edit; end
 
   def update
-    if @resturant.update(resturant_params)
-      redirect_to resturants_path, notice: 'Resturant updated'
-    else
-      flash[:notice] = 'Resturant not updated'
-      render 'edit'
-    end
+    @resturant&.update!(resturant_params)
+    redirect_to resturants_path(@resturant.id), notice: 'Resturant updated'
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to edit_resturant_path, alert: e.record.errors.full_messages[0]
   end
 
   def destroy
-    if @resturant.destroy
+    if @resturant&.destroy
       flash[:notice] = 'Resturant deleted'
     else
       flash[:alert] = 'Resturant can not deleted'
@@ -48,7 +45,7 @@ class ResturantsController < ApplicationController
   private
 
   def resturant_params
-    params.require(:resturant).permit(:name, :avatar)
+    params.require(:resturant).permit(:name, :image)
   end
 
   def find_resturant

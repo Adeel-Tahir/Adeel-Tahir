@@ -31,8 +31,10 @@
             <li class="nav-item">
               <%= link_to 'Orders',orders_path, class: 'nav-link' %>
             </li>
-              <li class="nav-item">
-             <%= link_to "Signed in as Admin",'#',class: 'nav-link' %>
+            <li class="nav-item">
+              <ul class="nav-link nav-disable" >
+                <%= link_to_if false,"Signed in as Admin",'#',class: 'nav-link',disabled: true %>
+              </ul>
             </li>
             <li class="nav-item">
              <%= link_to 'Sign out',destroy_user_session_path, method: :delete, class: 'nav-link' %>
@@ -49,7 +51,9 @@
               <%= link_to 'View Cart',carts_path, class: 'nav-link' %>
             </li>
             <li class="nav-item">
-             <%= link_to "Signed in as #{current_user.fullname}",'#',class: 'nav-link' %>
+             <ul class="nav-link nav-disable" >
+               <%= link_to_if false, "Signed in as #{current_user.fullname}",'#',disabled: true,class: 'nav-link' ,disabled:true%>
+             </ul>
             </li>
             <li class="nav-item">
              <%= link_to 'Sign out',destroy_user_session_path, method: :delete, class: 'nav-link' %>

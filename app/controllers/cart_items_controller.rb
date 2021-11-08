@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class CartItemsController < ApplicationController
+  before_action :find_cart_item, only: %i[update destroy]
+
   def destroy
-    @cart_item = CartItem.find_by(id: params[:id])
-    if @cart_item.destroy
+    if @cart_item&.destroy
       flash[:notice] = 'Cart Item deleted'
     else
       flash[:alert] = 'Cart Item not deleted'
@@ -13,17 +14,14 @@ class CartItemsController < ApplicationController
   end
 
   def update
-    @cart = CartItem.find_by(id: params[:id])
-    if @cart.update(cart_item_params)
-      flash[:notice] = 'Item has been Updated'
-      redirect_to carts_path
-    else
-      render :edit, flash[:alert] = 'Item can not be updated'
-    end
+    @cart_item&.update!(cart_item_params)
+    redirect_to carts_path, notice: 'Item has been Updated'
+  rescue ActiveRecord::RecordInvalid => e
+    render :edit, flash[:alert] = e.record.errors.full_messages[0]
   end
 
   def edit
-    item = Item.find(params[:id])
+    item = Item.find_by(id: params[:id])
     @cart = item.cart_items
   end
 
@@ -31,5 +29,9 @@ class CartItemsController < ApplicationController
 
   def cart_item_params
     params.require(:cart_item).permit(:quantity, :subtotal)
+  end
+
+  def find_cart_item
+    @cart_item = CartItem.find_by(id: params[:id])
   end
 end

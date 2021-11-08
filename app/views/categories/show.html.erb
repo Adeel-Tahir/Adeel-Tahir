@@ -1,9 +1,9 @@
 <% @categories.each do |category| %>
 
     <h1>Category:<%=category.name%><h1>
-    <% if category.avatar!=nil%>
+    <% if category.image!=nil%>
       <p>
-        <%=image_tag category.avatar, width: "200px" if item.category.attached? %>
+        <%=image_tag category.image, width: "200px" if item.category.attached? %>
       </p>
     <%end%>
   <br>

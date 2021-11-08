@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  include Pagy::Backend
   skip_before_action :verify_authenticity_token
   before_action :current_customer, :current_cart
   before_action :configure_permitted_parameters, if: :devise_controller?

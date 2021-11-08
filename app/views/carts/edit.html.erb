@@ -1,22 +1,20 @@
 <% @cart.in_groups_of(4, false).each do |group| %>
   <div class='row'>
-  <% group.each do |cart| %>
-    <% cart.items.each do |item| %>
-
-          <%= form_for @cart,:html => {:class => "form-horizontal center"} do |f|%>
-            <div class=form-width>
-              <div class="form-group">
-                <%= f.label :quantity,"Quantity",required:true,class: "col-md-4 control-label"%>
-                <div class="col-md-8">
-                  <%= f.text_field :quantity,required:true, class: "form-control"%>
-                </div>
-
-                <%= f.hidden_field :total,value: @cart.calculate_total%>
+    <% group.each do |cart| %>
+      <% cart.items.each do |item| %>
+        <%= form_for @cart,:html => {:class => "form-horizontal center"} do |f|%>
+          <div class=form-width>
+            <div class="form-group">
+              <%= f.label :quantity,"Quantity",required:true,class: "col-md-4 control-label"%>
+              <div class="col-md-8">
+                <%= f.text_field :quantity,required:true, class: "form-control"%>
               </div>
-                <%= f.submit "Update Category", class: "btn btn-default btn-primary btn-margin"%>
-              </div>
-          <%end%>
+              <%= f.hidden_field :total,value: @cart.calculate_total%>
+            </div>
+              <%= f.submit "Update Category", class: "btn btn-default btn-primary btn-margin"%>
+          </div>
+        <%end%>
+      <%end%>
     <%end%>
-  <%end%>
   </div>
 <%end%>

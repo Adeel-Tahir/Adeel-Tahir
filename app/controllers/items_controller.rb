@@ -7,7 +7,7 @@ class ItemsController < ApplicationController
 
   def index
     @categories = Category.all
-    @resturant = @res.items
+    @pagy, @resturant = pagy(@res.items)
     search_item
   end
 
@@ -17,14 +17,14 @@ class ItemsController < ApplicationController
 
   def create
     @item = @res.items.new(item_params)
-    if @item.save
+
+    begin
+      @item.save!
       redirect_to resturant_items_path, notice: 'Item Created'
-    else
-      render :new
+    rescue ActiveRecord::RecordInvalid => e
+      redirect_to new_resturant_item_path(resturant_id: @item.resturant.id),
+                  alert: e.record.errors.full_messages[0]
     end
-    cat_id = params[:item][:id]
-    cat = Category.find_by(id: cat_id)
-    @items.categorizations.create(category: cat) unless cat.nil?
   end
 
   def show
@@ -36,16 +36,14 @@ class ItemsController < ApplicationController
   def edit; end
 
   def update
-    if @item.update(item_params)
-      flash[:notice] = 'Item Updated'
-      redirect_to resturant_items_path(resturant_id: @item.resturant.id)
-    else
-      render :edit, flash[:alert] = 'Item not Updated'
-    end
+    @item&.update!(item_params)
+    redirect_to resturant_items_path(resturant_id: @item.resturant.id), notice: 'Item Updated'
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to edit_resturant_item(resturant_id: @item.resturant.id), alert: e.record.errors.full_messages[0]
   end
 
   def destroy
-    if @item.destroy
+    if @item&.destroy
       flash[:notice] = 'Item deleted'
     else
       flash[:alert] = 'Item can not be deleted'
@@ -56,7 +54,7 @@ class ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:name, :price, :description, :status, :avatar, category_ids: [])
+    params.require(:item).permit(:name, :price, :description, :status, :image, category_ids: [])
   end
 
   def check_permission
@@ -71,27 +69,15 @@ class ItemsController < ApplicationController
     @item = Item.find_by(id: params[:id])
   end
 
+  def find_category_by_resturant
+    return if params[:cate].nil?
+
+    cat = Category.find_by(id: params[:cate])
+    @resturant = cat.items.find_resturant_item(params[:resturant_id])
+  end
+
   def search_item
     find_category_by_resturant
-    search_resturant
-    @resturant = @resturant.filter1(params[:item][:category_id]) if params[:item] && !params[:item][:category_id].empty?
-  end
-
-  def find_category_by_resturant
-    cate = params[:cate]
-    if !cate.nil?
-      @cat = Category.find_by(id: cate)
-      if @cat.nil?
-        redirect_to resturant_items_path, alert: 'Category not found'
-      else
-        @resturant = @cat.items.find_resturant_item(params[:resturant_id])
-      end
-    else
-      @resturant = @res.items
-    end
-  end
-
-  def search_resturant
-    @resturant = @resturant.search(params[:search].downcase) if params[:search].present?
+    @resturant = @resturant.search_item_name(params[:search].downcase) if params[:search].present?
   end
 end

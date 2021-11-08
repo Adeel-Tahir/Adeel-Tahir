@@ -84,4 +84,3 @@ end
 gem 'pundit'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 # for validations
-gem 'client_side_validations'

@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   resources :resturants do
     resources :items
   end
-  resources :carts
+  resources :carts, except: :show
   resources :cart_items, only: %i[update destroy edit]
 
   resources :item_orders, :categories

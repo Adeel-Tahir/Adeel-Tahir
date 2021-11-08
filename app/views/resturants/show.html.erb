@@ -1,8 +1,8 @@
 <%if @resturant%>
       <div class='col-md-3'>
       <div class="card card-margin" style="width: 25rem;">
-            <% if @resturant.avatar!=nil%>
-            <%=image_tag @resturant.avatar, class:"card-img-top",height:"250px" if @resturant.avatar.attached? %>
+            <% if @resturant.image!=nil%>
+            <%=image_tag @resturant.image, class:"card-img-top",height:"250px" if @resturant.image.attached? %>
             <%end%>
             <div class="card-body">
             <h3 class="card-title"> <%=@resturant.name%><h3>

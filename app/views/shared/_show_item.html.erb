@@ -9,8 +9,8 @@
 
           <div class="col-12 mb-0">
             <figure class="view overlay rounded z-depth-1 main-img">
-                <% if @item.avatar!=nil%>
-                  <%=image_tag @item.avatar, class:"img-fluid z-depth-1" if @item.avatar.attached? %>
+                <% if @item.image!=nil%>
+                  <%=image_tag @item.image, class:"img-fluid z-depth-1" if @item.image.attached? %>
                 <%end%>
             </figure>
 
@@ -28,7 +28,7 @@
       <p class="pt-1"><%=@item.description%></p>
 
       <hr>
-      <% if @item.status=="available"%>
+      <% if @item.status=="Available"%>
           <%= form_with url: carts_path,html:{remote: true} do %>
             <div class="form-group">
               <div class="col-md-8">
@@ -42,7 +42,7 @@
               <%end%>
             </div>
           <%end%>
-      <%elsif @item.status=="outOfStock"%>
+      <%elsif @item.status=="OutOfStock"%>
          <button class="btn btn-secondary" disabled>Retired</button>
       <%end%>
     </div>
