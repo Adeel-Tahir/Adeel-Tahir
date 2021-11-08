@@ -18,11 +18,9 @@ class ResturantsController < ApplicationController
       @resturant.save!
       redirect_to resturants_path(@resturant.id), notice: 'Resturant Created'
     rescue ActiveRecord::RecordInvalid => e
-      redirect_to new_resturant_path, alert: e.record.errors.full_messages[0]
+      redirect_to new_resturant_path, alert: e.record.errors.full_messages.to_sentence
     end
   end
-
-  def show; end
 
   def edit; end
 
@@ -30,7 +28,7 @@ class ResturantsController < ApplicationController
     @resturant&.update!(resturant_params)
     redirect_to resturants_path(@resturant.id), notice: 'Resturant updated'
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to edit_resturant_path, alert: e.record.errors.full_messages[0]
+    redirect_to edit_resturant_path, alert: e.record.errors.full_messages.to_sentence
   end
 
   def destroy

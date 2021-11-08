@@ -7,7 +7,7 @@ class CartItemsController < ApplicationController
     if @cart_item&.destroy
       flash[:notice] = 'Cart Item deleted'
     else
-      flash[:alert] = 'Cart Item not deleted'
+      flash[:alert] = @cart_item.errors.full_messages.to_sentence
     end
 
     redirect_to carts_path
@@ -17,7 +17,7 @@ class CartItemsController < ApplicationController
     @cart_item&.update!(cart_item_params)
     redirect_to carts_path, notice: 'Item has been Updated'
   rescue ActiveRecord::RecordInvalid => e
-    render :edit, flash[:alert] = e.record.errors.full_messages[0]
+    render :edit, flash[:alert] = e.record.errors.full_messages.to_sentence
   end
 
   def edit

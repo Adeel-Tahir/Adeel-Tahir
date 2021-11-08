@@ -11,7 +11,8 @@ class CartsController < ApplicationController
               Cart.find_by(id: session[:cart])
 
             end
-    flash[:notice] = 'Cart is Empty' if @cart.cart_items[0].nil?
+    # byebug
+    flash[:notice] = 'Cart is Empty' if @cart.cart_items.blank?
   end
 
   def new
@@ -24,7 +25,7 @@ class CartsController < ApplicationController
     @resturant = @res.items
     ActiveRecord::Base.transaction do
       if current_user
-        cart_create
+        @cart=Cart.find_by(user_id: current_user.id) || Cart.create(user_id: current_user.id)
       else
         @cart = Cart.find_by(id: session[:cart])
       end
@@ -41,14 +42,14 @@ class CartsController < ApplicationController
     @cart&.update!(cart_params)
     redirect_to carts_path, notice: 'Cart updated'
   rescue ActiveRecord::RecordInvalid => e
-    render :edit, flash[:alert] = e.record.errors.full_messages[0]
+    render :edit, flash[:alert] = e.record.errors.full_messages.to_sentence
   end
 
   def destroy
     if @cart&.destroy
       flash[:notice] = 'Cart Item deleted'
     else
-      flash[:alert] = 'Cart Item not deleted'
+      flash[:alert] = @cart.errors.full_messages.to_sentence
     end
     redirect_to carts_path
   end
@@ -65,22 +66,6 @@ class CartsController < ApplicationController
     respond_to do |format|
       format.js if @cart.save
     end
-  end
-
-  def cart_create
-    if Cart.find_by(user_id: current_user.id).nil?
-      @cart = Cart.new(user_id: current_user.id)
-      cart_check
-    else
-      @cart = Cart.find_by(user_id: current_user&.id)
-    end
-  end
-
-  def cart_check
-    @cart.save!
-    flash[:notice] = 'Cart Item Created'
-  rescue ActiveRecord::RecordNotSaved
-    render :new, flash[:alert] = 'Cart Item cant be saved '
   end
 
   def find_cart

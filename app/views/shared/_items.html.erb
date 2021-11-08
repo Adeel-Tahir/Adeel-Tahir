@@ -17,7 +17,7 @@
             </div>
           <%end%>
           <%if current_user%>
-            <%if current_user.status=="admin" %>
+            <%if admin? %>
               <div class="card-body ">
                 <%= link_to "Edit", edit_resturant_item_path(@res,item), class: "card-link "%>
                 <%= link_to "Delete", resturant_item_path(@res,item) , :confirm =>"Are you sure?", :method =>:delete, class: "card-link link-color" %>
@@ -39,7 +39,7 @@
                         <%= f.hidden_field :quantity%>
                         <%= f.hidden_field :item ,value:item.id %>
                       </div>
-                      <%if !current_user || current_user.user?%>
+                      <%if !current_user || user?%>
                         <%= f.submit "Add to Cart",class: "btn btn-default btn-primary hidden_button",disabled:false %>
                       <%end%>
                     </div>
@@ -51,7 +51,7 @@
                   <%if item.status=="Available" %>
                       <%= form_with url: carts_path,html:{remote: true} do |f| %>
                           <div class="form-group">
-                          <%if !current_user || current_user.user?%>
+                          <%if !current_user || user?%>
                             <%= f.submit "Added to Cart", class: "btn btn-secondary",disabled: true%>
                           <%end%>
                           </div>
@@ -68,7 +68,7 @@
                             <%= f.hidden_field :quantity,class: "form-control"%>
                             <%= f.hidden_field :item ,item.id %>
                           </div>
-                          <%if !current_user || current_user.user?%>
+                          <%if !current_user || user?%>
                             <%= f.submit "Add to Cart", class: "btn btn-default btn-primary hidden_button"%>
                           <%end%>
                         </div>

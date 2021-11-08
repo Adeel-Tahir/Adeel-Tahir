@@ -14,11 +14,16 @@ class CategoriesController < ApplicationController
 
   def create
     @category = Category.new(category_params)
+    if @category.save
+
+    else
+
+    end
     begin
       @category.save!
       redirect_to categories_path, notice: 'Category Created'
     rescue ActiveRecord::RecordInvalid => e
-      redirect_to new_category_path, alert: e.record.errors.full_messages[0]
+      redirect_to new_category_path, alert: e.record.errors.full_messages.to_sentence
     end
   end
 
@@ -29,14 +34,14 @@ class CategoriesController < ApplicationController
     flash[:notice] = 'Category Updated'
     redirect_to categories_path
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to edit_category_path, alert: e.record.errors.full_messages[0]
+    redirect_to edit_category_path, alert: e.record.errors.full_messages.to_sentence
   end
 
   def destroy
     if @category&.destroy
       flash[:notice] = 'Category deleted'
     else
-      flash[:alert] = 'Category can not deleted'
+      flash[:alert] = @category.errors.full_messages.to_sentence
     end
     redirect_to categories_path
   end

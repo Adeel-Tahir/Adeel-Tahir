@@ -5,7 +5,6 @@ class OrdersController < ApplicationController
   before_action :find_order, only: %i[update show]
 
   def index
-    return unless current_user
 
     if current_user.user?
       @orders = current_user.orders
@@ -35,7 +34,7 @@ class OrdersController < ApplicationController
     @order&.update!(order_params)
     redirect_to orders_path, notice: 'Order Item updated'
   rescue ActiveRecord::RecordInvalid => e
-    render :edit, flash[:alert] = e.record.errors.full_messages[0]
+    render :edit, flash[:alert] = e.record.errors.full_messages.to_sentence
   end
 
   def show

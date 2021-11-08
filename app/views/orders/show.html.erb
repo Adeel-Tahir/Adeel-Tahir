@@ -1,6 +1,6 @@
 <div class="container">
   <%if @order%>
-    <%if current_user.admin?%>
+    <%if admin?%>
       <div class="row chng_btn">
         <span><h3 style="margin-right:10px;">Status:  </h3></span>
         <%if @order.status=="ordered" || @order.status=="paid"%>

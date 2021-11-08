@@ -6,7 +6,7 @@
         <%end%>
         <table class="table_order">
             <thead>
-                <%if current_user.admin?%>
+                <%if admin?%>
                 <th>CustomerName</th>
                 <%end%>
                 <th>Status</th>
@@ -17,7 +17,7 @@
             <%@orders.each do |order|%>
                 <tbody>
                     <tr>
-                        <%if current_user.admin?%>
+                        <%if admin?%>
                             <td><%=order.user_fullname%>
                         <%end%>
                         <td><%=order.status%>

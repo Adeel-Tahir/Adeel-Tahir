@@ -3,7 +3,7 @@
 class ItemsController < ApplicationController
   before_action :check_permission, only: %i[edit update destroy new create]
   before_action :find_resturant, only: %i[index create show]
-  before_action :find_item, only: %i[edit update destroy]
+  before_action :find_item, only: %i[edit update destroy show]
 
   def index
     @categories = Category.all
@@ -23,12 +23,11 @@ class ItemsController < ApplicationController
       redirect_to resturant_items_path, notice: 'Item Created'
     rescue ActiveRecord::RecordInvalid => e
       redirect_to new_resturant_item_path(resturant_id: @item.resturant.id),
-                  alert: e.record.errors.full_messages[0]
+                  alert: e.record.errors.full_messages.to_sentence
     end
   end
 
   def show
-    @item = Item.find_by(id: params[:id])
     @resturant = @item.resturant.items
     redirect_to resturants_path, alert: 'Item not found' if @item.nil?
   end
@@ -39,14 +38,14 @@ class ItemsController < ApplicationController
     @item&.update!(item_params)
     redirect_to resturant_items_path(resturant_id: @item.resturant.id), notice: 'Item Updated'
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to edit_resturant_item(resturant_id: @item.resturant.id), alert: e.record.errors.full_messages[0]
+    redirect_to edit_resturant_item(resturant_id: @item.resturant.id), alert: e.record.errors.full_messages
   end
 
   def destroy
     if @item&.destroy
       flash[:notice] = 'Item deleted'
     else
-      flash[:alert] = 'Item can not be deleted'
+      flash[:alert] = @item.errors.full_messages.to_sentence
     end
     redirect_to resturant_items_path
   end
