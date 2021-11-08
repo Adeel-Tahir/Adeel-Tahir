@@ -10,7 +10,15 @@ This Project is an online commerce website for online ordering.Application consi
 
 * Admin can delete Restaurants,Items and Categories
 
+* Admin can see all orders
+
+* Admin can update status of order.
+
 * Users can add,update and delete items from cart
+
+* Authenticated user can place order
+
+* Unauthenticated user cannot place order
 
 System Dependencies
 
