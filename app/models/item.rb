@@ -15,10 +15,9 @@ class Item < ApplicationRecord
   has_one_attached :image
   validate :correct_image_type
 
-  validates :name, presence: { message: 'Please enter name' }
-  validates :price, presence: { message: 'Please enter price' },
-                    numericality: { greater_than_or_equal_to: 0 }
-  validates :description, presence: { message: 'Please enter description' }
+  validates :name, presence: true
+  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :description, presence: true
 
   enum status: { Available: 0, OutofStock: 1 }
 

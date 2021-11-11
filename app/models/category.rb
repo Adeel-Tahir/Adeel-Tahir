@@ -9,6 +9,5 @@ class Category < ApplicationRecord
   has_one_attached :image
   validate :correct_image_type
 
-  validates :name, presence: { message: ': Category name is blank' },
-                   uniqueness: { message: ': Category name Must be unique' }
+  validates :name, presence: true, uniqueness: true
 end

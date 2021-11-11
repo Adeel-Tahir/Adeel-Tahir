@@ -37,7 +37,7 @@ class CategoriesController < ApplicationController
     if @category&.destroy
       flash[:notice] = 'Category deleted'
     else
-      flash[:alert] = @category.errors.full_messages.to_sentence
+      flash[:alert] = 'Category not deleted'
     end
     redirect_to categories_path
   end
