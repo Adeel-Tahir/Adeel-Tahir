@@ -4,6 +4,9 @@ require 'rails_helper'
 require Rails.root.join 'spec/concerns/validatable_spec.rb'
 
 RSpec.describe Item, type: :model do
+  let(:resturant) { create(:resturant) }
+  let(:item) { create(:item, name: 'macdonal', resturant_id: resturant.id) }
+
   describe 'associations' do
     it { is_expected.to have_many(:item_orders).dependent(:destroy) }
     it { is_expected.to have_many(:orders).through(:item_orders) }
@@ -22,27 +25,24 @@ RSpec.describe Item, type: :model do
     it { is_expected.to validate_numericality_of(:price) }
   end
 
-  it do
+  it 'check enum' do
     expect(subject).to define_enum_for(:status)
       .with_values(%i[Available OutofStock])
   end
 
-  describe ".resturant item" do
-    it "equal items of resturant" do
-      resturant=create(:resturant)
-      item=create(:item,resturant_id: resturant.id)
-      resturant_items=resturant.items
-      expect(Item.find_resturant_item(resturant)).to eq(resturant_items)
+  describe '.resturant item' do
+    it 'equal items of resturant' do
+      expect(described_class.find_resturant_item(resturant)).to eq(resturant.items)
     end
   end
 
-  describe ".search item name" do
-    it "equal items of resturant" do
-      resturant=create(:resturant)
-      item=create(:item,resturant_id: resturant.id)
-      item_name=item.name.downcase
-      search_item=Item.where("LOWER(name) LIKE '%#{item_name}%'")
-      expect(Item.search_item_name(item_name)).to eq(search_item)
+  describe '.search item name' do
+    it 'searches by name' do
+      expect(described_class.search_item_name('macdonal')).to include(item)
+    end
+
+    it 'does not search by wrong name' do
+      expect(described_class.search_item_name('KFC')).not_to include(item)
     end
   end
 end

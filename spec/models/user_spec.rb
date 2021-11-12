@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  before do
-    user = create(:user)
-  end
-
   describe 'associations' do
     it { is_expected.to have_many(:orders).dependent(:destroy) }
     it { is_expected.to have_one(:cart) }

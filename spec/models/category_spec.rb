@@ -4,7 +4,6 @@ require 'rails_helper'
 require Rails.root.join 'spec/concerns/validatable_spec.rb'
 
 RSpec.describe Category, type: :model do
-
   describe 'associations' do
     it { is_expected.to have_many(:categorizations).dependent(:destroy) }
     it { is_expected.to have_many(:items) }
@@ -18,5 +17,4 @@ RSpec.describe Category, type: :model do
 
     it { is_expected.to validate_uniqueness_of(:name) }
   end
-
 end
