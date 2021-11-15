@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require Rails.root.join 'spec/concerns/validatable_spec.rb'
-
 RSpec.describe Item, type: :model do
   let(:resturant) { create(:resturant) }
   let(:item) { create(:item, name: 'macdonal', resturant_id: resturant.id) }

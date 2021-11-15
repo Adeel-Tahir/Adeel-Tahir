@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require_relative '../support/devise'
-require 'faker'
-
 RSpec.describe ItemsController, type: :controller do
   let(:resturant) { create(:resturant) }
 
@@ -30,8 +26,9 @@ RSpec.describe ItemsController, type: :controller do
 
   describe 'GET #index' do
     let(:category) { create(:category) }
-
-    login_admin
+    before do
+      login_admin
+    end
     it 'returnses 200:Ok' do
       get :index, params: { resturant_id: resturant.id }
       expect(response).to have_http_status(:success)
@@ -52,16 +49,16 @@ RSpec.describe ItemsController, type: :controller do
     end
 
     context 'when unautherized user' do
-      login_user
       it 'does not authorized' do
+        login_user
         get :new, params: { resturant_id: resturant.id }
         expect(flash[:alert]).to eq('You are not authorized to perform this action.')
       end
     end
 
     context 'with authenticated user ' do
-      login_admin
       before do
+        login_admin
         get :new, params: { resturant_id: resturant.id }
       end
 
@@ -80,16 +77,16 @@ RSpec.describe ItemsController, type: :controller do
     end
 
     context 'when unauthorized user' do
-      login_user
       it 'noys authorize' do
+        login_user
         post :create, params: { resturant_id: resturant.id, item: params }
         expect(flash[:alert]).to eq('You are not authorized to perform this action.')
       end
     end
 
     context 'when authenticated user ' do
-      login_admin
       before do
+        login_admin
         post :create, params: { resturant_id: resturant.id, item: params2 }
       end
 
@@ -113,9 +110,9 @@ RSpec.describe ItemsController, type: :controller do
   describe 'GET #show' do
     let(:item4) { create(:item, resturant_id: resturant.id) }
 
-    login_user
     context 'when correct show item' do
       it 'returnses status ok' do
+        login_user
         get :show, params: { id: item4.id, resturant_id: resturant.id, item: params }
         expect(response).to have_http_status(:ok)
       end
@@ -125,8 +122,9 @@ RSpec.describe ItemsController, type: :controller do
   describe 'POST #update' do
     let(:category) { create(:category) }
     let(:item) { create(:item, category_ids: ['', category.id.to_s], resturant_id: resturant.id) }
-
-    login_admin
+    before do
+      login_admin
+    end
 
     it 'returns found status' do
       patch :update, params: { item: params, id: item.id, resturant_id: resturant.id }
@@ -155,16 +153,16 @@ RSpec.describe ItemsController, type: :controller do
     end
 
     context 'with unauthorized user' do
-      login_user
       it 'unauthorizes user' do
+        login_user
         delete :destroy, params: { id: item2.id, resturant_id: item2 }
         expect(flash[:alert]).to eq('You are not authorized to perform this action.')
       end
     end
 
     context 'with authenticated user' do
-      login_admin
       before do
+        login_admin
         delete :destroy, params: { id: item2.id, resturant_id: item2 }
       end
 

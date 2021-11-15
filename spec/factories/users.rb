@@ -9,10 +9,4 @@ FactoryBot.define do
     status { 'admin' }
     password { Faker::Internet.password }
   end
-  # factory :user, class: User do
-  #   fullname { Faker::Name.fullname }
-  #   status {"user"}
-  #   email { Faker::Internet.email }
-  #   password {Faker::Internet.password}
-  # end
 end

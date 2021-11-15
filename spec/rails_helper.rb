@@ -9,16 +9,8 @@ require 'spec_helper'
 require 'devise'
 require_relative 'support/factory_bot'
 require_relative 'support/chrome'
+require_relative "support/controller_macros"
 
-# RSpec.configure do |config|
-
-#   # config.use_transactional_fixtures = true
-# end
-# require Rails.root.join "spec/concerns/validatable_spec.rb"
-
-# describe Master do
-#   it_behaves_like "validatable"
-# end
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
@@ -89,6 +81,8 @@ RSpec.configure do |config|
   end
 
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include ControllerMacros, :type => :controller
+
 
   config.include Warden::Test::Helpers
 end

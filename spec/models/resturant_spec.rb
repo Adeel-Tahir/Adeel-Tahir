@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-# require Rails.root.join 'spec/concerns/validatable_spec.rb'
-
 RSpec.describe Resturant, type: :model do
   describe 'associations' do
     it { is_expected.to have_many(:items).dependent(:destroy) }

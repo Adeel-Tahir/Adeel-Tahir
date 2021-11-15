@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require_relative '../support/devise'
-require 'faker'
-
 RSpec.describe CategoriesController, type: :controller do
-  let(:user) { create(:user) }
   let(:params) do
     {
       name: Faker::Name.name,
@@ -20,8 +15,8 @@ RSpec.describe CategoriesController, type: :controller do
   end
 
   describe 'GET #index' do
-    login_admin
     before do
+      login_admin
       get :index
     end
 
@@ -35,8 +30,8 @@ RSpec.describe CategoriesController, type: :controller do
   end
 
   describe 'GET #new' do
-    login_admin
     it 'returnses 200:Ok' do
+      login_admin
       get :new
       expect(response).to have_http_status(:ok)
     end
@@ -51,15 +46,17 @@ RSpec.describe CategoriesController, type: :controller do
     end
 
     context 'with unauthorized user' do
-      login_user
       it 'does not authorized' do
+        login_user
         post :create, params: { category: params }
         expect(flash[:alert]).to eq('You are not authorized to perform this action.')
       end
     end
 
     context 'with authenticated user ' do
-      login_admin
+      before do
+        login_admin
+      end
       it 'responses redirect_to status' do
         post :create, params: { category: params }
         expect(response).to be_redirect
@@ -88,8 +85,8 @@ RSpec.describe CategoriesController, type: :controller do
     end
 
     context 'with unauthorized user' do
-      login_user
       it 'unauthorizes user' do
+        login_user
         patch :update, params: { id: category.id, category: params }
         expect(flash[:alert]).to eq('You are not authorized to perform this action.')
       end
@@ -98,8 +95,8 @@ RSpec.describe CategoriesController, type: :controller do
     context 'with authenticated user' do
       let(:category2) { create(:category) }
 
-      login_admin
       before do
+        login_admin
         patch :update, params: { id: category2.id, category: params }
       end
 
@@ -129,17 +126,19 @@ RSpec.describe CategoriesController, type: :controller do
     end
 
     context 'with unauthorize user' do
-      login_user
       let(:category3) { create(:category) }
 
       it 'unauthorizes user' do
+        login_user
         delete :destroy, params: { id: category3.id }
         expect(flash[:alert]).to eq('You are not authorized to perform this action.')
       end
     end
 
     context 'with authenticated user' do
-      login_admin
+      before do
+        login_admin
+      end
       context 'when correct category destroy' do
         before do
           delete :destroy, params: { id: category3.id }
