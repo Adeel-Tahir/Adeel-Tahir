@@ -12,11 +12,6 @@ class User < ApplicationRecord
 
   enum status: { admin: 0, user: 1 }
 
-  # def admin?
-  #   status.eql?('admin')
-  # end
-
-  # def user?
-  #   status.eql?('user')
-  # end
+  validates :fullname, presence: true
+  validates :email, presence: true, uniqueness: { message: ': Email already exist' }
 end

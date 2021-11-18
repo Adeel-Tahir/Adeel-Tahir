@@ -5,7 +5,7 @@ class Resturant < ApplicationRecord
 
   has_many :items, dependent: :destroy
 
-  validates :name, presence: { message: ': Resturant name is blank' }
+  validates :name, presence: true
 
   has_one_attached :image
   validate :correct_image_type

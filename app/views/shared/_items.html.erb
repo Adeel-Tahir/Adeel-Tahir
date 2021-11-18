@@ -3,7 +3,7 @@
     <% group.each do |item| %>
       <div class='col-md-3'>
         <div class="card card-margin" style="width: 25rem;">
-          <%= link_to resturant_item_path(@resturant,item.id) do%>
+          <%= link_to resturant_item_path(item.resturant_id,item.id) do%>
             <% if item.image!=nil%>
               <%=image_tag item.image, class:"card-img-top",height:"250px" if item.image.attached? %>
             <%end%>
