@@ -57,6 +57,7 @@ RSpec.describe CategoriesController, type: :controller do
       before do
         login_admin
       end
+
       it 'responses redirect_to status' do
         post :create, params: { category: params }
         expect(response).to be_redirect
@@ -139,6 +140,7 @@ RSpec.describe CategoriesController, type: :controller do
       before do
         login_admin
       end
+
       context 'when correct category destroy' do
         before do
           delete :destroy, params: { id: category3.id }

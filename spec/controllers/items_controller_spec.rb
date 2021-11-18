@@ -26,9 +26,11 @@ RSpec.describe ItemsController, type: :controller do
 
   describe 'GET #index' do
     let(:category) { create(:category) }
+
     before do
       login_admin
     end
+
     it 'returnses 200:Ok' do
       get :index, params: { resturant_id: resturant.id }
       expect(response).to have_http_status(:success)
@@ -122,6 +124,7 @@ RSpec.describe ItemsController, type: :controller do
   describe 'POST #update' do
     let(:category) { create(:category) }
     let(:item) { create(:item, category_ids: ['', category.id.to_s], resturant_id: resturant.id) }
+
     before do
       login_admin
     end
